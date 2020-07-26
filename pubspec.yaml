@@ -1,0 +1,39 @@
+name: flutterarch
+description: A new Flutter application.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^3.0.9
+  provider: ^4.1.3
+  shimmer: ^1.1.1
+  cupertino_icons: ^0.1.2
+  # scoped model
+  scoped_model: ^1.0.1
+  # dependency injection
+  get_it: ^1.0.3
+  carousel_slider: ^2.2.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - images/
+  fonts:
+    - family: Zillaslab
+      fonts:
+        - asset: fonts/Zillaslab-bold.ttf
+        - asset: fonts/Zillaslab-light.ttf
+        - asset: fonts/Zillaslab-medium.ttf
+        - asset: fonts/Zillaslab-regular.ttf
+    - family: PT
+      fonts:
+        - asset: fonts/PT-bold.ttf
+        - asset: fonts/PT-italic.ttf
+        - asset: fonts/PT-regular.ttf
