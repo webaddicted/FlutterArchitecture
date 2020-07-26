@@ -232,6 +232,20 @@ ClipRRect loadLocalCircleImg(String imagePath, double radius) {
         image: 'imgUrl'),
   );
 }
+FadeInImage loadImg(String url, int placeHolderPos) {
+  return new FadeInImage.assetNetwork(
+      fit: BoxFit.fill,
+      placeholder: _getPlaceHolder(placeHolderPos),
+      image: url);
+}
+String _getPlaceHolder(int placeHolderPos) {
+  switch (placeHolderPos) {
+    case 0:
+      return AssetsConst.LOGO_IMG;
+    default:
+      return AssetsConst.LOGO_IMG;
+  }
+}
 
 
 
