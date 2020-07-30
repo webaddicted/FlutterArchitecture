@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: StringConst.APP_NAME,
-//      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
 //      darkTheme: ThemeData.dark(),
       theme: ThemeData(
         fontFamily: AssetsConst.ZILLASLAB_FONT,
@@ -27,6 +27,88 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class Page1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+          alignment: Alignment.bottomCenter,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Page2()),
+              );
+            },
+            child: Hero(
+                tag: "profile-image",
+                child: CircleAvatar(
+                  maxRadius: 100.0,
+                  backgroundImage: NetworkImage(
+                    "https://images.unsplash.com/flagged/photo-1566127992631-137a642a90f4",
+                  ),
+                )),
+          ),
+        ));
+  }
+}
+
+
+class Page2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Hero(
+          tag: "profile-image",
+          child: Container(
+            width: double.infinity,
+            height: 400.0,
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(
+                      "https://images.unsplash.com/flagged/photo-1566127992631-137a642a90f4",
+                    ),
+                    fit: BoxFit.cover)),
+          ),
+        ));
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Widget _createUi() {
 //  return ScopedModel(model: model, child: apiresponse(model)));;

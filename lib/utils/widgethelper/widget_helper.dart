@@ -4,6 +4,43 @@ import 'package:flutterarch/constant/assets_const.dart';
 import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 
+//  {START PAGE NAVIGATION}
+void navigationPush(BuildContext context, StatefulWidget route) {
+  Navigator.push(context, MaterialPageRoute(
+    builder: (context) {
+      return route;
+    },
+  ));
+}
+
+void navigationPop(BuildContext context, StatefulWidget route) {
+  Navigator.pop(context, MaterialPageRoute(builder: (context) {
+    return route;
+  }));
+}
+
+void navigationStateLessPush(BuildContext context, StatelessWidget route) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return route;
+  }));
+}
+
+void navigationStateLessPop(BuildContext context, StatelessWidget route) {
+  Navigator.pop(context, MaterialPageRoute(builder: (context) {
+    return route;
+  }));
+}
+
+void delay(BuildContext context, int duration, StatefulWidget route) {
+  Future.delayed(const Duration(seconds: 3), () {
+    navigationPush(context, route);
+  });
+}
+
+//  {END PAGE NAVIGATION}
+
+
+
 Widget apiHandler<T>(
     {ApiResponse<T> response, loading: Widget, error: Widget}) {
   switch (response.status) {
@@ -103,7 +140,7 @@ AppBar getAppBarWithBackBtn(
     title: new Text(
       title,
       style: new TextStyle(
-          fontWeight: FontWeight.bold, fontSize: fontSize!=null ? fontSize : 16),
+          fontWeight: FontWeight.bold,color: Colors.black, fontSize: fontSize!=null ? fontSize : 16),
     ),
   );
 }
@@ -238,6 +275,18 @@ FadeInImage loadImg(String url, int placeHolderPos) {
       placeholder: _getPlaceHolder(placeHolderPos),
       image: url);
 }
+ClipRRect loadCircleImg(String imgUrl, int placeHolderPos, double radius) {
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(radius),
+    child: new FadeInImage.assetNetwork(
+        height: radius,
+        width: radius,
+        fit: BoxFit.fill,
+        placeholder: _getPlaceHolder(placeHolderPos),
+        image: imgUrl),
+  );
+}
+
 String _getPlaceHolder(int placeHolderPos) {
   switch (placeHolderPos) {
     case 0:
@@ -245,6 +294,12 @@ String _getPlaceHolder(int placeHolderPos) {
     default:
       return AssetsConst.LOGO_IMG;
   }
+}
+Divider getDivider() {
+  return Divider(
+    color: ColorConst.GREY_COLOR,
+    height: 1,
+  );
 }
 
 

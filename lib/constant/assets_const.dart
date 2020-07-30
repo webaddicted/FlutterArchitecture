@@ -7,5 +7,7 @@ class AssetsConst {
 
 //  {START IMAGES}
   static const String LOGO_IMG = 'images/logo.png';
+  static const String PIZZA_IMG = 'images/pizza.jpg';
+
 //  {END IMAGES}
 }

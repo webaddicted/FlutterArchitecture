@@ -20,5 +20,5 @@ class ColorConst {
   static Color CIRCLE_FADE1 = colorFromHex('#9BCCFFFF');
   static Color CIRCLE_FADE2 = colorFromHex('#ACCCE6FF');
   static Color CIRCLE_FADE3 = colorFromHex('#93FFFFCC');
-
+  static Color BLACK_FADE = colorFromHex('#5E000000');
 }
