@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/constant/assets_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/bean/story_bean.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/detail_movie.dart';
+import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 
-class TrandingMovieRow extends StatelessWidget {
+class SifiMovieRow extends StatelessWidget {
   final animationName;
 
-  TrandingMovieRow(this.animationName);
+  SifiMovieRow(this.animationName);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,7 @@ class TrandingMovieRow extends StatelessWidget {
             itemBuilder: (context, index) {
               var item = _populateData()[index];
               return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                 child: GestureDetector(
                   onTap: () {
                     navigationPush(
@@ -42,20 +43,39 @@ class TrandingMovieRow extends StatelessWidget {
 //                  ));
                   },
                   child: Expanded(
-                    child: Hero(
-                      tag: animationName + index.toString(),
-                      child: Container(
-                        child: ClipRRect(
-                          child: Image.asset(
-                            AssetsConst.PIZZA_IMG,
-                            fit: BoxFit.cover,
-                            width: 125,
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Hero(
+                        tag: animationName + index.toString(),
+                        child: Expanded(
+                          child: Container(
+                            height: 150,
+                            child: ClipRRect(
+                              child: Image.network(ApiConstant.DEMO_IMG, fit: BoxFit.cover, ),
+//                              Image.asset(
+//                                AssetsConst.PIZZA_IMG,
+//                                fit: BoxFit.cover,
+//                              ),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                    ),
-                  ),
+
+                      ///Add Text Also,
+                      SizedBox(
+                        height: 8,
+                      ),
+
+                      ///For spacing
+
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: getTxtBlackColor(
+                              msg: "Grilled Burger", fontSize: 15)),
+                    ],
+                  )),
                 ),
 //                tag: AssetsConst.PIZZA_IMG,
               );
@@ -95,25 +115,4 @@ class TrandingMovieRow extends StatelessWidget {
     ];
     return _stories;
   }
-
-
-}
-Widget getHeading(String heading) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 8, right: 8),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        getTxtBlackColor(
-            msg: heading, fontSize: 19, fontWeight: FontWeight.w700),
-        GestureDetector(
-          onTap: () {},
-          child: getTxtColor(
-              msg: StringConst.VIEW_ALL,
-              txtColor: Colors.blue,
-              fontWeight: FontWeight.w800),
-        )
-      ],
-    ),
-  );
 }

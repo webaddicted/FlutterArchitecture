@@ -7,6 +7,7 @@ import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/widget/carousel_view.dart';
 import 'package:flutterarch/view/widget/navig_drawer.dart';
+import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,51 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-//              Padding(
-//                padding:
-//                    const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-//                child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: <Widget>[
-//                    getTxtBlackColor(
-//                        msg: 'Hey,\nWelcome',
-//                        fontSize: 18,
-//                        fontWeight: FontWeight.w700),
-//                    loadCircleImg(ApiConstant.DEMO_IMG, 0, 40),
-//                  ],
-//                ),
-//              ),
               SizedBox(height: 10),
               CarouselView(),
-              SizedBox(height: 10),
-              getHeading(StringConst.TRANDING_MOVIE),
-              SizedBox(height: 10),
               TrandingMovieRow("Tranding"),
-              SizedBox(height: 10),
-              getHeading(StringConst.CATEGORY),
-              SizedBox(height: 10),
               getCate(),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: getTxtBlackColor(
-                    msg: StringConst.TRANDING_MOVIE,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700),
-              ),
-              SizedBox(height: 10),
               TrandingMovieRow("category"),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: getTxtBlackColor(
-                    msg: StringConst.TRANDING_MOVIE,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700),
-              ),
-              SizedBox(height: 10),
+              SifiMovieRow("animationName"),
               TrandingMovieRow("SiFi"),
-              SizedBox(height: 10),
             ],
           ),
         ),
@@ -111,17 +74,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget getCate() {
-    return SizedBox(
-      height: 120,
-      child: Container(
-        child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 50,
-            itemBuilder: (BuildContext context, int index) {
-              return getCatRow();
-            }),
-      ),
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 10),
+        getHeading(StringConst.CATEGORY),
+        SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          child: Container(
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: 50,
+                itemBuilder: (BuildContext context, int index) {
+                  return getCatRow();
+                }),
+          ),
+        ),
+      ],
     );
   }
 
