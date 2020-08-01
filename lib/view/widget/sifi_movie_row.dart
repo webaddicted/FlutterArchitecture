@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterarch/constant/api_constant.dart';
-import 'package:flutterarch/constant/assets_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/bean/story_bean.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
@@ -15,14 +14,15 @@ class SifiMovieRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return getTradingList();
+    return getTradingList(context);
   }
 
-  Widget getTradingList() {
+  Widget getTradingList(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(StringConst.TRANDING_MOVIE),
+        getHeading(context,StringConst.TRANDING_MOVIE),
         SizedBox(height: 10),
         SizedBox(
           height: 190.0,
@@ -38,9 +38,6 @@ class SifiMovieRow extends StatelessWidget {
                   onTap: () {
                     navigationPush(
                         context, DetailsMovieScreen(animationName, index));
-//                  Navigator.push(context, MaterialPageRoute(
-//                      builder: (context) => DetailsMovieScreen(AssetsConst.PIZZA_IMG)
-//                  ));
                   },
                   child: Expanded(
                       child: Column(
@@ -51,13 +48,10 @@ class SifiMovieRow extends StatelessWidget {
                         child: Expanded(
                           child: Container(
                             height: 150,
+                            width: size.width-80,
                             child: ClipRRect(
                               child: Image.network(ApiConstant.DEMO_IMG, fit: BoxFit.cover, ),
-//                              Image.asset(
-//                                AssetsConst.PIZZA_IMG,
-//                                fit: BoxFit.cover,
-//                              ),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),

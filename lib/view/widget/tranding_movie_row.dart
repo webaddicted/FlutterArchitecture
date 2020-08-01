@@ -5,6 +5,7 @@ import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/bean/story_bean.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/detail_movie.dart';
+import 'package:flutterarch/view/details/movie_list_screen.dart';
 
 class TrandingMovieRow extends StatelessWidget {
   final animationName;
@@ -13,14 +14,14 @@ class TrandingMovieRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return getTradingList();
+    return getTradingList(context);
   }
 
-  Widget getTradingList() {
+  Widget getTradingList(BuildContext context) {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(StringConst.TRANDING_MOVIE),
+        getHeading(context, StringConst.TRANDING_MOVIE),
         SizedBox(height: 10),
         SizedBox(
           height: 190.0,
@@ -98,7 +99,7 @@ class TrandingMovieRow extends StatelessWidget {
 
 
 }
-Widget getHeading(String heading) {
+Widget getHeading(BuildContext context,String heading) {
   return Padding(
     padding: const EdgeInsets.only(left: 8, right: 8),
     child: Row(
@@ -107,7 +108,9 @@ Widget getHeading(String heading) {
         getTxtBlackColor(
             msg: heading, fontSize: 19, fontWeight: FontWeight.w700),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            navigationPush(context, MovieListScreen());
+          },
           child: getTxtColor(
               msg: StringConst.VIEW_ALL,
               txtColor: Colors.blue,
