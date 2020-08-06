@@ -1,27 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterarch/constant/assets_const.dart';
+import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/constant/color_const.dart';
-import 'package:flutterarch/constant/string_const.dart';
+import 'package:flutterarch/data/home/now_playing_respo.dart';
+import 'package:flutterarch/model/movie_model.dart';
+import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
+import 'package:flutterarch/view/details/detail_movie.dart';
+import 'package:flutterarch/view/home/home_screen.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class MovieListScreen extends StatefulWidget {
+  String apiName;
 
-  MovieListScreen();
+  MovieListScreen(this.apiName);
 
   @override
-  _MovieListScreenState createState() =>
-      _MovieListScreenState();
+  _MovieListScreenState createState() => _MovieListScreenState(apiName);
 }
 
 class _MovieListScreenState extends State<MovieListScreen> {
+  _MovieListScreenState(this.apiName);
 
-  _MovieListScreenState();
+  MovieModel model;
+  String apiName;
+
+  @override
+  void initState() {
+    super.initState();
+    model = MovieModel();
+    callMovieApi(apiName, model);
+  }
 
   @override
   Widget build(BuildContext context) {
-//    return
-//      body: ScopedModel(model: model, child: apiresponse(model)));
     var homeIcon = IconButton(
         icon: Icon(
           Icons.arrow_back_ios,
@@ -33,127 +45,64 @@ class _MovieListScreenState extends State<MovieListScreen> {
     return Scaffold(
         appBar: getAppBarWithBackBtn(
             ctx: context,
-            title: StringConst.HOME_TITLE,
+            title: getTitle(apiName),
             bgColor: Colors.white,
             icon: homeIcon),
-        body: _createUi());
+        body: ScopedModel(model: model, child: apiresponse()));
   }
 
-  Widget _createUi() {
-    final size = MediaQuery
-        .of(context)
-        .size;
+  Widget apiresponse() {
+    return ScopedModelDescendant<MovieModel>(
+      builder: (context, _, model) {
+        var jsonResult = getData(apiName, model);
+        if (jsonResult.status == ApiStatus.COMPLETED)
+          return _createUi(jsonResult.data.results);
+        else
+          return apiHandler(response: jsonResult);
+      },
+    );
+  }
+
+  Widget _createUi(List<Result> results) {
+    final size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
     return Container(
 //      width: double.infinity,
 //      height: double.infinity,
         child: Container(
-          alignment: Alignment.center,
-          child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10),
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
+      alignment: Alignment.center,
+      child: GridView.builder(
+          itemCount: results.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1.1 / 1.4),
+          itemBuilder: (BuildContext context, int index) {
+            Result item = results[index];
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: InkWell(
                   onTap: () {
+                    navigationPush(
+                        context, DetailsMovieScreen(apiName, index));
                   },
-                  child: Card(
-                    elevation: 1.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        AspectRatio(
-                          aspectRatio: 18.0 / 12.0,
-                          child: Image.asset(
-                            AssetsConst.PIZZA_IMG,
-                            fit: BoxFit.cover,
-                          ),
-//              loadImg(ApiConst.DEMO_IMG, 0),
-                        ),
-                        new Padding(
-                          padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 2.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                StringConst.TRANDING_MOVIE,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Color(0xFFD73C29),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'item.category',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 9.0,
-                                ),
-                              ),
-                              SizedBox(height: 0.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(right: 4.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          'RELEASE DATE:',
-                                          style: TextStyle(
-                                            color: Colors.black38,
-                                            fontSize: 9.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'item.releaseDate',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 9.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 4.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          'RUNTIME:',
-                                          style: TextStyle(
-                                            color: Colors.black38,
-                                            fontSize: 9.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'item.runtime',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 9.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: SizedBox(
+                    height: 250,
+                    child: Container(
+                        height: 250,
+                        child: Hero(
+                            tag: apiName + index.toString(),
+                            child: Image.network(
+                              ApiConstant.IMAGE_POSTER + item.poster_path,
+                              fit: BoxFit.cover,
+                              height: 180,
+                            ))),
                   ),
-                );
-              })
-          ,
-        ));
+                ),
+              ),
+            );
+          }),
+    ));
   }
 }

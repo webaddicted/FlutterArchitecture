@@ -1,13 +1,13 @@
 /// api_key : "asfdadasdsadad"
 
-class Movie_req {
+class MovieReq {
   String _apiKey;
 
   String get apiKey => _apiKey;
 
-  Movie_req(this._apiKey);
+  MovieReq(this._apiKey);
 
-  Movie_req.map(dynamic obj) {
+  MovieReq.map(dynamic obj) {
     this._apiKey = obj["api_key"];
   }
 

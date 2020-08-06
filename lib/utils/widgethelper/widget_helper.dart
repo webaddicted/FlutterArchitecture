@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterarch/constant/assets_const.dart';
@@ -42,7 +43,7 @@ void delay(BuildContext context, int duration, StatefulWidget route) {
 
 
 Widget apiHandler<T>(
-    {ApiResponse<T> response, loading: Widget, error: Widget}) {
+    {ApiResponse<T> response, Widget loading , Widget error}) {
   switch (response.status) {
     case ApiStatus.LOADING:
       debugPrint("LOADING");
@@ -295,6 +296,16 @@ String _getPlaceHolder(int placeHolderPos) {
       return AssetsConst.LOGO_IMG;
   }
 }
+
+Widget getCacheImage(String url){
+  return CachedNetworkImage(
+    imageUrl: url,
+    placeholder: (context, url) =>
+    const CircularProgressIndicator(),
+    errorWidget: (context, url, error) => const Icon(Icons.error),
+  );
+}
+
 Divider getDivider() {
   return Divider(
     color: ColorConst.GREY_COLOR,
