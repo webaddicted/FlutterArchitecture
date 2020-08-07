@@ -44,7 +44,9 @@ Widget getSliderItem(Result item) {
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         child: Stack(
           children: <Widget>[
-            getCacheImage(ApiConstant.IMAGE_POSTER + item.poster_path),
+            SizedBox(
+                width: double.infinity,
+                child: getCacheImage(ApiConstant.IMAGE_POSTER + item.poster_path)),
             Positioned(
               bottom: 0.0,
               left: 0.0,

@@ -177,7 +177,7 @@ Text getTxtWhiteColor(
 }
 
 Text getTxtBlackColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
+    {@required String msg, double fontSize, FontWeight fontWeight, int maxLine}) {
   return Text(
     msg,
     style: _getFontStyle(
@@ -299,6 +299,7 @@ String _getPlaceHolder(int placeHolderPos) {
 
 Widget getCacheImage(String url){
   return CachedNetworkImage(
+    fit: BoxFit.cover,
     imageUrl: url,
     placeholder: (context, url) =>
     const CircularProgressIndicator(),

@@ -18,9 +18,25 @@ class ApiConstant {
   static const UPCOMING_MOVIE = 'movie/upcoming';
   static const TOP_RATED = 'movie/top_rated';
 
+  static const MOVIE_DETAILS = 'movie/';
+  static const CREDITS_CREW = '/credits';
+  static const MOVIE_KEYWORDS = '/keywords';
+  static const MOVIE_VIDEOS = '/videos';
+  static const RECOMMENDATIONS_MOVIE = '/recommendations';
+  static const SIMILAR_MOVIES = '/similar';
+  static const KEYWORDS_MOVIE_LIST = 'keywords/';
+
   static var TRENDING_PERSONS = "trending/person/week";
+  static var PERSONS_DETAILS = "person/";
+  static var PERSONS_MOVIE_CREDITS = "/movie_credits";
+  static var PERSONS_IMAGES = "/images";
+
+
+
   static var movieUrl = "movie";
-  static var IMAGE_POSTER = 'https://image.tmdb.org/t/p/original';
+  static var IMAGE_ORIG_POSTER = 'https://image.tmdb.org/t/p/original';
+  static var IMAGE_POSTER = 'https://image.tmdb.org/t/p/w185';
+
 
   static var LANGUAGE = 'en-US';
 }

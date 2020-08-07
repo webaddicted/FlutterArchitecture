@@ -52,7 +52,7 @@ class SifiMovieRow extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                 child: GestureDetector(
                   onTap: () {
-                    navigationPush(context, DetailsMovieScreen(apiName, index));
+                    navigationPush(context, DetailsMovieScreen(apiName, index, item.id.toString()));
                   },
                   child: Expanded(
                       child: Column(

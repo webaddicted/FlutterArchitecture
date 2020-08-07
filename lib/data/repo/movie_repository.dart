@@ -3,8 +3,15 @@ import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/data/bean/comon_movie_req.dart';
 import 'package:flutterarch/data/bean/movie_req.dart';
 import 'package:flutterarch/data/bean/movie_respo.dart';
+import 'package:flutterarch/data/details/credits_crew_respo.dart';
+import 'package:flutterarch/data/details/keyword_respo.dart';
+import 'package:flutterarch/data/details/movie_details_respo.dart';
+import 'package:flutterarch/data/details/video_respo.dart';
 import 'package:flutterarch/data/home/movie_cat_respo.dart';
 import 'package:flutterarch/data/home/now_playing_respo.dart';
+import 'package:flutterarch/data/person/person_detail_respo.dart';
+import 'package:flutterarch/data/person/person_img_respo.dart';
+import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/utils/apiutils/api_base_helper.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 
@@ -21,22 +28,19 @@ class MovieRepository {
           errCode: ApiRespoCode.known,
           errMsg: error.toString(),
           errBdy: stacktrace.toString(),
-      data:null);
+          data: null);
     }
   }
 
-  fetchNowPlaying({String endPoint, int page})async {
+  fetchNowPlaying({String endPoint, int page}) async {
     try {
-      var commonReq ;
-      if(page==null){
+      var commonReq;
+      if (page == null) {
         commonReq = CommonMovieReq.empty().toJson();
-      }else{
+      } else {
         commonReq = CommonMovieReq.page(page.toString()).toJson();
       }
-      final response = await apiHelper.getWithParam(
-          "${endPoint}",
-      commonReq
-      );
+      final response = await apiHelper.getWithParam("${endPoint}", commonReq);
       return ApiResponse.returnResponse(
           response, NowPlayingRespo.fromJson(jsonDecode(response.toString())));
     } catch (error, stacktrace) {
@@ -44,16 +48,14 @@ class MovieRepository {
           errCode: ApiRespoCode.known,
           errMsg: error.toString(),
           errBdy: stacktrace.toString(),
-          data:null);
+          data: null);
     }
   }
 
-  fetchMovieCat()async {
+  fetchMovieCat() async {
     try {
       final response = await apiHelper.getWithParam(
-          "${ApiConstant.GENRES_LIST}",
-          CommonMovieReq.empty().toJson()
-      );
+          "${ApiConstant.GENRES_LIST}", CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(
           response, MovieCatRespo.fromJson(jsonDecode(response.toString())));
     } catch (error, stacktrace) {
@@ -61,8 +63,133 @@ class MovieRepository {
           errCode: ApiRespoCode.known,
           errMsg: error.toString(),
           errBdy: stacktrace.toString(),
-          data:null);
+          data: null);
     }
   }
 
+  movieDetails(String movieId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.MOVIE_DETAILS + movieId}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(response,
+          MovieDetailsRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  movieCrewCast(String movieId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.MOVIE_DETAILS + movieId + ApiConstant.CREDITS_CREW}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(
+          response, CreditsCrewRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  movieKeyword(String movieId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.MOVIE_DETAILS + movieId + ApiConstant.MOVIE_KEYWORDS}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(
+          response, KeywordRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  movieVideo(String movieId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.MOVIE_DETAILS + movieId + ApiConstant.MOVIE_VIDEOS}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(
+          response, VideoRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  fetchTrandingPerson() async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.TRENDING_PERSONS}", CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(
+          response, VideoRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  fetchPersonDetail() async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.PERSONS_DETAILS}", CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(response,
+          PersonDetailRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  fetchPersonMovie(int personId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.PERSONS_DETAILS + personId.toString() + ApiConstant.PERSONS_MOVIE_CREDITS}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(response,
+          PersonMovieRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  fetchPersonImage(int personId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.PERSONS_DETAILS + personId.toString() + ApiConstant.PERSONS_IMAGES}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(response,
+          PersonImgRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
 }
