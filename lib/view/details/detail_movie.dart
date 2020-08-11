@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterarch/constant/api_constant.dart';
-import 'package:flutterarch/constant/assets_const.dart';
-import 'package:flutterarch/constant/color_const.dart';
+import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/details/movie_details_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/widget/genre_movie.dart';
+import 'package:flutterarch/view/widget/movie_cast_crew.dart';
+import 'package:flutterarch/view/widget/movie_keyword.dart';
 import 'package:flutterarch/view/widget/rating_result.dart';
+import 'package:flutterarch/view/widget/tranding_movie_row.dart';
+import 'package:flutterarch/view/widget/video_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class DetailsMovieScreen extends StatefulWidget {
@@ -38,6 +41,12 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
     super.initState();
     model = MovieModel();
     model.movieDetails(movieId);
+    model.movieCrewCast(movieId);
+    model.fetchRecommendMovie(movieId);
+    model.fetchSimilarMovie(movieId);
+    model.movieKeyword(movieId);
+    model.movieVideo(movieId);
+
   }
 
   @override
@@ -59,7 +68,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
   }
 
   Widget _createUi(MovieDetailsRespo data) {
-    print(' obj   :  ' + data.releaseDate);
+//    print(' obj   :  ' + data.releaseDate);
     final size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
@@ -101,7 +110,12 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            model.movieDetails(movieId);
+            model.movieCrewCast(movieId);
+//            model.fetchRecommendMovie(movieId);
+//            model.fetchSimilarMovie(movieId);
+            model.movieKeyword(movieId);
+//            Navigator.pop(context);
           },
         ),
       ),
@@ -141,8 +155,13 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _contentTitle(data),
-//          _contentCast(),
-//          _contentSimiliarMovie()
+          MovieCastCrew(StringConst.MOVIE_CAST),
+          MovieCastCrew(StringConst.MOVIE_CREW),
+//          getHeading(context: context, apiName: 'Keyword'),
+          VideoView('Trailer'),
+          MovieKeyword('Keyword'),
+          TrandingMovieRow(ApiConstant.RECOMMENDATIONS_MOVIE),
+          TrandingMovieRow(ApiConstant.SIMILAR_MOVIES),
         ],
       ),
     );
@@ -169,7 +188,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
                     fontSize: 24,
                     fontWeight: FontWeight.bold),
               ),
-              RatingResult(8.9, 12.0)
+              RatingResult(movie.voteAverage, 12.0)
             ],
           ),
           SizedBox(height: 7),
@@ -181,7 +200,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
               msg: 'Overview', fontSize: 18, fontWeight: FontWeight.bold),
           SizedBox(height: 7),
           getTxtGreyColor(
-              msg: movie.overview, fontSize: 15, fontWeight: FontWeight.w400)
+              msg: movie.overview, fontSize: 15, fontWeight: FontWeight.w400),
         ],
       ),
     );
@@ -198,18 +217,18 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-//              if (_dataMovie.status != null)
-              _contentDescriptionAbout('Status', _dataMovie.status),
-//              if (_dataMovie.runtime != null)
-              _contentDescriptionAbout('Runtime', '${_dataMovie.runtime}'),
-              _contentDescriptionAbout('Premiere', _dataMovie.releaseDate),
-//              if (_dataMovie.budget != null)
-              _contentDescriptionAbout('Budget', '\$${_dataMovie.budget}'),
-//              if (_dataMovie.revenue != null)
-              _contentDescriptionAbout('Revenue', '\$${_dataMovie.revenue}'),
+              if (_dataMovie.status != null)
+                _contentDescriptionAbout('Status', _dataMovie.status),
+              if (_dataMovie.runtime != null)
+                _contentDescriptionAbout(
+                    'Duration', '${_dataMovie.runtime} min'),
+              _contentDescriptionAbout('Release Date', _dataMovie.releaseDate),
+              if (_dataMovie.budget != null)
+                _contentDescriptionAbout('Budget', '\$${_dataMovie.budget}'),
+              if (_dataMovie.revenue != null)
+                _contentDescriptionAbout('Revenue', '\$${_dataMovie.revenue}'),
             ],
           ),
-//          if (_dataMovie.backdropPath != null)
           Container(
               width: 80,
               height: 125,
@@ -227,24 +246,17 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: ColorConst.BLACK_COLOR,
-                  letterSpacing: 0.5),
-              textAlign: TextAlign.start,
-            ),
+            getTxtBlackColor(
+                msg: title,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                textAlign: TextAlign.start),
             Text(' : '),
-            Text(
-              value,
-              style: TextStyle(
-                  fontSize: 14,
-                  color: ColorConst.APP_COLOR,
-                  letterSpacing: 0.5),
-              textAlign: TextAlign.start,
-            ),
+            getTxtAppColor(
+                msg: value,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                textAlign: TextAlign.start),
           ],
         ),
         SizedBox(
@@ -252,5 +264,32 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
         )
       ],
     );
+  }
+
+  Widget showKeyword() {
+    return Expanded(
+      child: ListView(
+        padding: const EdgeInsets.all(20.0),
+        children: _getKeywordListings(), // <<<<< Note this change for the return type
+      ),
+    );
+  }
+
+  List<Widget> _getKeywordListings() {
+    List listings = List<Widget>();
+    int i = 0;
+    for (i = 0; i < 5; i++) {
+      listings.add(
+        RadioListTile<String>(
+          title: const Text('Lafayette'),
+          value: "c",
+          groupValue: "x",
+          onChanged: (_) {
+
+          },
+        ),
+      );
+    }
+    return listings;
   }
 }

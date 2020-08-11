@@ -9,6 +9,7 @@ import 'package:flutterarch/data/home/now_playing_respo.dart';
 import 'package:flutterarch/data/person/person_detail_respo.dart';
 import 'package:flutterarch/data/person/person_img_respo.dart';
 import 'package:flutterarch/data/person/person_movie_respo.dart';
+import 'package:flutterarch/data/person/tranding_person_respo.dart';
 import 'package:flutterarch/data/repo/movie_repository.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -34,7 +35,7 @@ class MovieModel extends Model {
   ApiResponse<NowPlayingRespo> _similarMovieRespo;
   ApiResponse<NowPlayingRespo> _keywordMovieListRespo;
 //    {END MOVIE DETAILS PAGE API}
-  ApiResponse<NowPlayingRespo> _trandingPersonRespo;
+  ApiResponse<TrandingPersonRespo> _trandingPersonRespo;
   ApiResponse<PersonDetailRespo> _personDetailRespo;
   ApiResponse<PersonMovieRespo> _personMovieRespo;
   ApiResponse<PersonImgRespo> _personImageRespo;
@@ -211,7 +212,7 @@ class MovieModel extends Model {
     notifyListeners();
   }
 
-  ApiResponse<NowPlayingRespo> get trandingPersonRespo => _trandingPersonRespo;
+  ApiResponse<TrandingPersonRespo> get trandingPersonRespo => _trandingPersonRespo;
 
   fetchTrandingPerson() async {
     _trandingPersonRespo = ApiResponse.loading();

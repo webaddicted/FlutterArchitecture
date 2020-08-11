@@ -73,6 +73,13 @@ Widget getSliderItem(Result item) {
                 ),
               ),
             ),
+            Positioned.fill(
+                child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.redAccent,
+                      onTap: () => {},
+                    ))),
           ],
         )),
   );

@@ -12,6 +12,7 @@ import 'package:flutterarch/data/home/now_playing_respo.dart';
 import 'package:flutterarch/data/person/person_detail_respo.dart';
 import 'package:flutterarch/data/person/person_img_respo.dart';
 import 'package:flutterarch/data/person/person_movie_respo.dart';
+import 'package:flutterarch/data/person/tranding_person_respo.dart';
 import 'package:flutterarch/utils/apiutils/api_base_helper.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 
@@ -136,7 +137,7 @@ class MovieRepository {
       final response = await apiHelper.getWithParam(
           "${ApiConstant.TRENDING_PERSONS}", CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(
-          response, VideoRespo.fromJson(jsonDecode(response.toString())));
+          response, TrandingPersonRespo.fromJson(jsonDecode(response.toString())));
     } catch (error, stacktrace) {
       return ApiResponse.error(
           errCode: ApiRespoCode.known,

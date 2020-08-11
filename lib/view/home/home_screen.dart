@@ -10,6 +10,7 @@ import 'package:flutterarch/view/widget/movie_cate.dart';
 import 'package:flutterarch/view/widget/navig_drawer.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
+import 'package:flutterarch/view/widget/tranding_person.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,11 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     model = MovieModel();
     model.fetchNowPlaying();
+    model.fetchTrandingPerson();
     callMovieApi(ApiConstant.POPULAR_MOVIES, model);
     callMovieApi(ApiConstant.GENRES_LIST, model);
     callMovieApi(ApiConstant.TRENDING_MOVIE_LIST, model);
     callMovieApi(ApiConstant.DISCOVER_MOVIE, model);
     callMovieApi(ApiConstant.UPCOMING_MOVIE, model);
+    model.fetchTrandingPerson();
     callMovieApi(ApiConstant.TOP_RATED, model);
   }
 
@@ -41,9 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorConst.BLACK_COLOR,
         ),
         onPressed: () {
-//          model.fetchNowPlaying();
-//          model.upcommingMovie();
-//          Navigator.pop(context);
+          model.fetchNowPlaying();
+          model.fetchTrandingPerson();
+          callMovieApi(ApiConstant.POPULAR_MOVIES, model);
+          callMovieApi(ApiConstant.GENRES_LIST, model);
+          callMovieApi(ApiConstant.TRENDING_MOVIE_LIST, model);
+          callMovieApi(ApiConstant.DISCOVER_MOVIE, model);
+          callMovieApi(ApiConstant.UPCOMING_MOVIE, model);
+          model.fetchTrandingPerson();
+          callMovieApi(ApiConstant.TOP_RATED, model);
         });
     return Scaffold(
         appBar: getAppBarWithBackBtn(
@@ -66,11 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               SizedBox(height: 10),
               CarouselView(),
-              TrandingMovieRow(ApiConstant.POPULAR_MOVIES),
-              MovieCate(),
               TrandingMovieRow(ApiConstant.TRENDING_MOVIE_LIST),
+              MovieCate(),
+              TrandingMovieRow(ApiConstant.POPULAR_MOVIES),
               SifiMovieRow(ApiConstant.UPCOMING_MOVIE),
               TrandingMovieRow(ApiConstant.DISCOVER_MOVIE),
+              TrandingPerson(),
               TrandingMovieRow(ApiConstant.TOP_RATED),
             ],
           ),
@@ -94,10 +104,16 @@ String getTitle(String apiName) {
       return 'Upcomming Movie';
     case ApiConstant.TOP_RATED:
       return 'Top Rated Movie';
+    case ApiConstant.RECOMMENDATIONS_MOVIE:
+      return 'Recommendations';
+    case ApiConstant.SIMILAR_MOVIES:
+      return 'Similar Movie';
+    default:
+      return apiName;
   }
 }
 
-callMovieApi(String apiName, MovieModel model) {
+callMovieApi(String apiName, MovieModel model, {String movieId}) {
   switch (apiName) {
     case ApiConstant.POPULAR_MOVIES:
       return model.fetchPopularMovie();
@@ -111,6 +127,10 @@ callMovieApi(String apiName, MovieModel model) {
       return model.upcommingMovie();
     case ApiConstant.TOP_RATED:
       return model.topRatedMovie();
+    case ApiConstant.RECOMMENDATIONS_MOVIE:
+      return model.fetchRecommendMovie(movieId);
+    case ApiConstant.SIMILAR_MOVIES:
+      return model.fetchSimilarMovie(movieId);
   }
 }
 
@@ -128,5 +148,9 @@ getData(String apiName, MovieModel model) {
       return model.getUpcommingMovie;
     case ApiConstant.TOP_RATED:
       return model.getTopRatedMovie;
+    case ApiConstant.RECOMMENDATIONS_MOVIE:
+      return model.recommendMovieRespo;
+    case ApiConstant.SIMILAR_MOVIES:
+      return model.similarMovieRespo;
   }
 }

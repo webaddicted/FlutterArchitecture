@@ -10,6 +10,7 @@ import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/detail_movie.dart';
 import 'package:flutterarch/view/details/movie_list_screen.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
+import 'package:flutterarch/view/widget/rating_result.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class TrandingMovieRow extends StatelessWidget {
@@ -27,7 +28,9 @@ class TrandingMovieRow extends StatelessWidget {
       builder: (context, _, model) {
         var jsonResult = getData(apiName, model);
         if (jsonResult.status == ApiStatus.COMPLETED)
-          return getMovieList(context, apiName, jsonResult.data.results);
+          return jsonResult.data.results.length > 0
+              ? getMovieList(context, apiName, jsonResult.data.results)
+              : Container();
         else
           return apiHandler(response: jsonResult);
       },
@@ -39,7 +42,7 @@ class TrandingMovieRow extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context, apiName),
+        getHeading(context: context, apiName: apiName),
         SizedBox(height: 10),
         SizedBox(
           height: 240.0,
@@ -52,7 +55,7 @@ class TrandingMovieRow extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(4.0),
                 child:
-                    getMovieItemRow(context, apiName, item, index, 185, 125, 2),
+                    getMovieItemRow(context, apiName, item, index, 185, 125, 1),
               );
             },
           ),
@@ -65,16 +68,16 @@ class TrandingMovieRow extends StatelessWidget {
 Widget getMovieItemRow(BuildContext context, String apiName, Result item,
     int index, double height, double width, int maxLine) {
   return Container(
-    child: GestureDetector(
-      onTap: () => navigationPush(context, DetailsMovieScreen(apiName, index, item.id.toString())),
-      child: Expanded(
-        child: Hero(
-          tag: getTitle(apiName) + index.toString(),
-          child: Container(
-            width: width,
-            child: Column(
-              children: <Widget>[
-                 SizedBox(
+    child: Expanded(
+      child: Hero(
+        tag: getTitle(apiName) + index.toString(),
+        child: Container(
+          width: width,
+          child: Column(
+            children: <Widget>[
+              Stack(
+                children: [
+                  SizedBox(
                     height: height,
                     child: ClipRRect(
                       child: getCacheImage(
@@ -82,55 +85,75 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                Align(
+                  Positioned.fill(
+                      child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            splashColor: Colors.redAccent,
+                            onTap: () => navigationPush(
+                                context,
+                                DetailsMovieScreen(
+                                    apiName, index, item.id.toString())),
+                          ))),
+                ],
+              ),
+              Align(
                   alignment: Alignment.topLeft,
-                  child: Text(item.title,
+                  child: getTxtBlackColor(
+                      msg: item.title,
                       maxLines: maxLine,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          height: 1.4,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11.0)),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    getTxtBlackColor(
-                        msg: item.vote_average.toString(),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                    SizedBox(
-                      width: 5.0,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.start)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+//                  getTxtBlackColor(
+//                      msg: item.vote_average.toString(),
+//                      fontSize: 12,
+//                      fontWeight: FontWeight.bold),
+                  RatingResult(item.vote_average, 12.0),
+                  SizedBox(
+                    width: 5.0,
+                  ),
+                  RatingBar(
+                    itemSize: 12.0,
+                    initialRating: item.vote_average / 2,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: _getBackgrountRate(item.vote_average),
                     ),
-                    RatingBar(
-                      itemSize: 12.0,
-                      initialRating: item.vote_average / 2,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                      itemBuilder: (context, _) => Icon(
-                        Icons.star,
-                        color: Colors.blue,
-                      ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
-                    )
-                  ],
-                )
-              ],
-            ),
+                    onRatingUpdate: (rating) {
+                      print(rating);
+                    },
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),
     ),
   );
 }
+Color _getBackgrountRate(double rate) {
+  if (rate < 5.0) {
+    return Colors.red;
+  } else if (rate < 6.8) {
+    return Colors.yellow;
+  } else if (rate < 7.3) {
+    return Colors.blue;
+  } else {
+    return Colors.green;
+  }
+}
 
-Widget getHeading(BuildContext context, String apiName) {
+Widget getHeading({BuildContext context, String apiName, bool isShowViewAll}) {
   return Padding(
     padding: const EdgeInsets.only(left: 8, right: 8),
     child: Row(
@@ -138,6 +161,7 @@ Widget getHeading(BuildContext context, String apiName) {
       children: <Widget>[
         getTxtBlackColor(
             msg: getTitle(apiName), fontSize: 19, fontWeight: FontWeight.w700),
+//        if (isShowViewAll)
         GestureDetector(
           onTap: () {
             navigationPush(context, MovieListScreen(apiName));

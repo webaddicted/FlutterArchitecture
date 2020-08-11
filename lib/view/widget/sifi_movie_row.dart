@@ -37,7 +37,7 @@ class SifiMovieRow extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context, apiName),
+        getHeading(context: context, apiName: apiName),
         SizedBox(height: 10),
         SizedBox(
           height: 190.0,
@@ -50,40 +50,49 @@ class SifiMovieRow extends StatelessWidget {
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-                child: GestureDetector(
-                  onTap: () {
-                    navigationPush(context, DetailsMovieScreen(apiName, index, item.id.toString()));
-                  },
-                  child: Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Hero(
-                        tag: getTitle(apiName) + index.toString(),
-                        child: Expanded(
-                          child: Container(
-                            height: 150,
-                            width: size.width - 80,
-                            child: ClipRRect(
-                              child: Image.network(
-                                ApiConstant.IMAGE_POSTER + item.poster_path,
-                                fit: BoxFit.cover,
+                child: Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Hero(
+                      tag: getTitle(apiName) + index.toString(),
+                      child: Expanded(
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 150,
+                              width: size.width - 80,
+                              child: ClipRRect(
+                                child: Image.network(
+                                  ApiConstant.IMAGE_POSTER + item.poster_path,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ),
+                            Positioned.fill(
+                                child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      splashColor: Colors.redAccent,
+                                      onTap: () => navigationPush(
+                                          context,
+                                          DetailsMovieScreen(apiName, index,
+                                              item.id.toString())),
+                                    ))),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 5),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: getTxtBlackColor(
-                              msg: item.original_title,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700)),
-                    ],
-                  )),
-                ),
+                    ),
+                    SizedBox(height: 5),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: getTxtBlackColor(
+                            msg: item.original_title,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700)),
+                  ],
+                )),
               );
             },
           ),

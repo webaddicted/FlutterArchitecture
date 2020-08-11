@@ -31,7 +31,7 @@ class MovieCate extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context, ApiConstant.GENRES_LIST),
+        getHeading(context:context,apiName: ApiConstant.GENRES_LIST),
         SizedBox(height: 10),
         SizedBox(
           height: 120,

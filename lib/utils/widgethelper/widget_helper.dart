@@ -147,17 +147,21 @@ AppBar getAppBarWithBackBtn(
 }
 
 //  {START TEXT VIEW}
-Text getTxt({@required String msg, FontWeight fontWeight}) {
+Text getTxt({@required String msg, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
   return Text(msg,
+      maxLines: maxLines,
+      textAlign: textAlign,
       style: TextStyle(
           fontFamily: AssetsConst.ZILLASLAB_FONT,
           fontWeight: fontWeight == null ? FontWeight.normal : fontWeight));
 }
 
 Text getTxtAppColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
+    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
   return Text(
     msg,
+    maxLines: maxLines,
+    textAlign: textAlign,
     style: _getFontStyle(
         txtColor: ColorConst.APP_COLOR,
         fontSize: fontSize,
@@ -166,9 +170,11 @@ Text getTxtAppColor(
 }
 
 Text getTxtWhiteColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
+    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
   return Text(
     msg,
+    maxLines: maxLines,
+    textAlign: textAlign,
     style: _getFontStyle(
         txtColor: Colors.white,
         fontSize: fontSize,
@@ -177,56 +183,26 @@ Text getTxtWhiteColor(
 }
 
 Text getTxtBlackColor(
-    {@required String msg, double fontSize, FontWeight fontWeight, int maxLine}) {
+    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
   return Text(
     msg,
+    textAlign: textAlign,
+    maxLines: maxLines,
     style: _getFontStyle(
         txtColor: Colors.black, fontSize: fontSize, fontWeight: fontWeight),
   );
 }
 
 Text getTxtGreyColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
+    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
   return Text(
     msg,
+    textAlign: textAlign,
+    maxLines: maxLines,
     style: _getFontStyle(
         txtColor: ColorConst.GREY_COLOR,
         fontSize: fontSize,
         fontWeight: fontWeight),
-  );
-}
-
-Text getTxtGreyCenterColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
-  return Text(
-    msg,
-    textAlign: TextAlign.center,
-    style: _getFontStyle(
-        txtColor: ColorConst.GREY_COLOR,
-        fontSize: fontSize,
-        fontWeight: fontWeight),
-  );
-}
-
-Text getTxtWhiteCenterColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
-  return Text(
-    msg,
-    textAlign: TextAlign.center,
-    style: _getFontStyle(
-        txtColor: ColorConst.WHITE_COLOR,
-        fontSize: fontSize,
-        fontWeight: fontWeight),
-  );
-}
-
-Text getTxtBlackCenterColor(
-    {@required String msg, double fontSize, FontWeight fontWeight}) {
-  return Text(
-    msg,
-    textAlign: TextAlign.center,
-    style: _getFontStyle(
-        txtColor: Colors.black, fontSize: fontSize, fontWeight: fontWeight),
   );
 }
 
@@ -234,10 +210,11 @@ Text getTxtColor(
     {@required String msg,
       @required Color txtColor,
       double fontSize,
-      FontWeight fontWeight}) {
+      FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
   return Text(
     msg,
-    textAlign: TextAlign.center,
+    textAlign: textAlign,
+    maxLines: maxLines,
     style: _getFontStyle(
         txtColor: txtColor, fontSize: fontSize, fontWeight: fontWeight),
   );
