@@ -37,7 +37,7 @@ class ApiConstant {
   static var movieUrl = "movie";
   static var IMAGE_ORIG_POSTER = 'https://image.tmdb.org/t/p/original';
   static var IMAGE_POSTER = 'https://image.tmdb.org/t/p/w185';
-
+  static var IMAGE_POSTER_300 = 'https://image.tmdb.org/t/p/w300';
 
   static var LANGUAGE = 'en-US';
 }

@@ -7,6 +7,7 @@ import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
+import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class PersonDetail extends StatefulWidget {
@@ -21,19 +22,20 @@ class PersonDetail extends StatefulWidget {
 }
 
 class _PersonDetailState extends State<PersonDetail> {
-  final id;
+  final personId;
   final imgPath;
   final tag;
   MovieModel model;
 
-  _PersonDetailState(this.id, this.imgPath, this.tag);
+  _PersonDetailState(this.personId, this.imgPath, this.tag);
 
   @override
   void initState() {
     super.initState();
     model = MovieModel();
-    model.fetchPersonDetail(id);
-    model.fetchPersonImage(id);
+    model.fetchPersonDetail(personId);
+    model.fetchPersonImage(personId);
+    model.fetchPersonMovie(personId);
   }
 
   @override
@@ -67,7 +69,7 @@ class _PersonDetailState extends State<PersonDetail> {
                 background: Hero(
                     tag: tag,
                     child: CachedNetworkImage(
-                      imageUrl: ApiConstant.IMAGE_ORIG_POSTER + imgPath,
+                      imageUrl: ApiConstant.IMAGE_ORIG_POSTER + imgPath==null?'':imgPath,
                       fit: BoxFit.fill,
                     )),
               )),
@@ -88,7 +90,8 @@ class _PersonDetailState extends State<PersonDetail> {
           personalInfo(data),
           SizedBox(height: 10),
           SifiMovieRow(StringConst.IMAGES),
-//          SifiMovieRow(StringConst.IMAGES)
+          TrandingMovieRow(apiName:StringConst.PERSON_MOVIE_CREW, movieId: personId),
+          TrandingMovieRow(apiName:StringConst.PERSON_MOVIE_CAST, movieId: personId)
         ],
       ),
     );
@@ -96,14 +99,24 @@ class _PersonDetailState extends State<PersonDetail> {
 
   Widget personalInfo(PersonDetailRespo data) {
     final size = MediaQuery.of(context).size;
-    final _now = data.deathday != null
-        ? DateTime.parse(data.deathday).year
-        : DateTime.now().year;
-
-    int yearold = _now - DateTime.parse(data.birthday).year;
+    int yearold = 0;
+    if(data.deathday!=null || data.birthday!=null) {
+      final _now = data.deathday != null
+          ? DateTime
+          .parse(data.deathday)
+          .year
+          : DateTime
+          .now()
+          .year;
+      yearold = _now - DateTime
+          .parse(data.birthday)
+          .year;
+    }
     return Container(
       padding: EdgeInsets.all(8),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 5),
           getTxtBlackColor(
@@ -113,7 +126,7 @@ class _PersonDetailState extends State<PersonDetail> {
               textAlign: TextAlign.start),
           SizedBox(height: 15),
           getTxtGreyColor(
-              msg: data.biography, fontSize: 15, fontWeight: FontWeight.w400),
+              msg: data.biography!=null?data.biography:'', fontSize: 15, fontWeight: FontWeight.w400),
           SizedBox(height: 15),
           getTxtBlackColor(
               msg: StringConst.PERSONAL_INFO,
@@ -149,9 +162,9 @@ class _PersonDetailState extends State<PersonDetail> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getTxtGreyColor(msg: hint, fontSize: 13, textAlign: TextAlign.start),
+        getTxtGreyColor(msg: hint!=null?hint:'', fontSize: 13, textAlign: TextAlign.start),
         SizedBox(height: 3),
-        getTxtBlackColor(msg: detail, fontSize: 16, textAlign: TextAlign.start),
+        getTxtBlackColor(msg: detail!=null?detail:'', fontSize: 16, textAlign: TextAlign.start),
         SizedBox(height: 8),
         Divider(height: 2),
         SizedBox(height: 8),

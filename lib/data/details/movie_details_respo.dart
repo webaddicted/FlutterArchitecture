@@ -504,7 +504,7 @@ class MovieDetailsRespo {
     tagline = json['tagline'];
     title = json['title'];
     video = json['video'];
-    voteAverage = json['vote_average'];
+    voteAverage = json['vote_average'].toDouble();
     voteCount = json['vote_count'];
   }
 

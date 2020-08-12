@@ -28,7 +28,7 @@ class SifiMovieRow extends StatelessWidget {
       builder: (context, _, model) {
         var jsonResult = getData(apiName, model);
         if (jsonResult.status == ApiStatus.COMPLETED)
-          return getTradingList(context, jsonResult.data);
+          return getCount(jsonResult)>0?getTradingList(context, jsonResult.data):Container();
         else
           return apiHandler(response: jsonResult);
       },
@@ -42,7 +42,7 @@ class SifiMovieRow extends StatelessWidget {
         getHeading(
             context: context,
             apiName: apiName,
-            isShowViewAll: getCount(jsonResult) > 8 ? true : false),
+            isShowViewAll: isShowViewAll(jsonResult)),
         SizedBox(height: 10),
         SizedBox(
           height: 190.0,
@@ -67,7 +67,18 @@ class SifiMovieRow extends StatelessWidget {
     else if (results is MovieImgRespo)
       return results.backdrops.length;
     else
-      return 1;
+      return 0;
+  }
+
+  bool isShowViewAll(results) {
+    if (results is NowPlayingRespo)
+      return getCount(results) > 8 ? true : false;
+    else if (apiName == StringConst.IMAGES && results is MovieImgRespo)
+      return false;
+    else if (results is MovieImgRespo)
+      return false;
+    else
+      return true;
   }
 
   Widget getView(BuildContext context, int index, jsonResult) {
@@ -77,7 +88,7 @@ class SifiMovieRow extends StatelessWidget {
         item = jsonResult.profiles[index];
       else
         item = jsonResult.backdrops[index];
-      String tag = getTitle(apiName) + item.filePath + index.toString();
+      String tag = getTitle(apiName) + item.filePath!=null ?item.filePath:'' + index.toString();
       return getLargeItem(
           context: context,
           img: ApiConstant.IMAGE_POSTER + item.filePath,

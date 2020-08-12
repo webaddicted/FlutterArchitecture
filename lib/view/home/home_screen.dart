@@ -111,6 +111,10 @@ String getTitle(String apiName) {
     case ApiConstant.MOVIE_IMAGES:
     case StringConst.IMAGES:
       return StringConst.IMAGES;
+    case StringConst.PERSON_MOVIE_CREW:
+      return 'Movie As Crew';
+    case StringConst.PERSON_MOVIE_CAST:
+      return 'Movie As Crew';
     default:
       return apiName;
   }
@@ -141,6 +145,10 @@ callMovieApi(String apiName, MovieModel model, {int movieId}) {
       return model.movieCrewCast(movieId);
     case StringConst.TRANDING_PERSON_OF_WEEK:
       return model.fetchTrandingPerson();
+    case StringConst.PERSON_MOVIE_CAST:
+    case StringConst.PERSON_MOVIE_CREW:
+      return model.fetchPersonMovie(movieId);
+
   }
 }
 
@@ -171,5 +179,8 @@ getData(String apiName, MovieModel model) {
       return model.personImageRespo;
     case StringConst.TRANDING_PERSON_OF_WEEK:
       return model.trandingPersonRespo;
+    case StringConst.PERSON_MOVIE_CAST:
+    case StringConst.PERSON_MOVIE_CREW:
+      return model.personMovieRespo;
   }
 }

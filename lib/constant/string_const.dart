@@ -27,5 +27,9 @@ class StringConst {
 
   static const String IMAGES = 'Images';
 
+  static const String PERSON_MOVIE_CREW = 'Person Movie Crew';
+  static const String PERSON_MOVIE_CAST = 'Person Movie Cast';
+
+
 //  {END TITLE}
 }

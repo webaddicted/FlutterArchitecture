@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/home/now_playing_respo.dart';
+import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
@@ -29,8 +30,8 @@ class TrandingMovieRow extends StatelessWidget {
       builder: (context, _, model) {
         var jsonResult = getData(apiName, model);
         if (jsonResult.status == ApiStatus.COMPLETED)
-          return jsonResult.data.results.length > 0
-              ? getMovieList(context, apiName, jsonResult.data.results)
+          return getCount(jsonResult.data) > 0
+              ? getMovieList(context, apiName, jsonResult.data)
               : Container();
         else
           return apiHandler(response: jsonResult);
@@ -38,8 +39,8 @@ class TrandingMovieRow extends StatelessWidget {
     );
   }
 
-  Widget getMovieList(
-      BuildContext context, String apiName, List<Result> results) {
+//  List<Result>
+  Widget getMovieList(BuildContext context, String apiName, var jsonResult) {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
@@ -47,20 +48,19 @@ class TrandingMovieRow extends StatelessWidget {
             context: context,
             apiName: apiName,
             movieId: movieId,
-            isShowViewAll: results.length > 8 ? true : false),
+            isShowViewAll: getCount(jsonResult) > 8 ? true : false),
         SizedBox(height: 10),
         SizedBox(
           height: 240.0,
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: results.length,
+            itemCount: getCount(jsonResult), //results.length,
             itemBuilder: (context, index) {
-              Result item = results[index];
+//              Result item = jsonResult[index];
               return Padding(
                 padding: const EdgeInsets.all(4.0),
-                child:
-                    getMovieItemRow(context, apiName, item, index, 185, 125, 1),
+                child: getView(context, apiName, jsonResult, index),
               );
             },
           ),
@@ -68,16 +68,87 @@ class TrandingMovieRow extends StatelessWidget {
       ],
     );
   }
+
+  int getCount(jsonResult) {
+    if (jsonResult is NowPlayingRespo)
+      return jsonResult.results.length;
+    else if (apiName == StringConst.PERSON_MOVIE_CAST &&
+        jsonResult is PersonMovieRespo)
+      return jsonResult.cast.length;
+    else if (apiName == StringConst.PERSON_MOVIE_CREW &&
+        jsonResult is PersonMovieRespo) return jsonResult.crew.length;
+    return 0;
+  }
+
+//  bool isShowViewAll(jsonResult) {
+//    if (jsonResult is NowPlayingRespo)
+//      return getCount(jsonResult) > 8 ? true : false;
+//    else  if (apiName == StringConst.PERSON_MOVIE_CAST &&
+//        jsonResult is PersonMovieRespo)
+//      return false;
+//    else if (apiName == StringConst.PERSON_MOVIE_CREW &&
+//        jsonResult is PersonMovieRespo) return jsonResult.crew.length;
+//      return false;
+//    else
+//      return true;
+//  }
+
+  Widget getView(BuildContext context, String apiName, jsonResult, int index) {
+    if (jsonResult is NowPlayingRespo) {
+      Result item = jsonResult.results[index];
+      return getMovieItemRow(
+          context: context,
+          apiName: apiName,
+          index: index,
+          height: 185,
+          width: 125,
+          id: item.id,
+          img: item.poster_path,
+          name: item.original_title,
+          vote: item.vote_average);
+    } else if (apiName == StringConst.PERSON_MOVIE_CAST &&
+        jsonResult is PersonMovieRespo) {
+      PersonCast item = jsonResult.cast[index];
+      return getMovieItemRow(
+          context: context,
+          apiName: apiName,
+          index: index,
+          height: 185,
+          width: 125,
+          id: item.id,
+          img: item.posterPath,
+          name: item.originalTitle,
+          vote: item.voteAverage);
+    } else if (apiName == StringConst.PERSON_MOVIE_CREW &&
+        jsonResult is PersonMovieRespo) {
+      PersonCrew item = jsonResult.crew[index];
+      return getMovieItemRow(
+          context: context,
+          apiName: apiName,
+          index: index,
+          height: 185,
+          width: 125,
+          id: item.id,
+          img: item.posterPath,
+          name: item.originalTitle,
+          vote: item.voteAverage);
+    } else
+      return Container();
+  }
 }
 
-Widget getMovieItemRow(BuildContext context, String apiName, Result item,
-    int index, double height, double width, int maxLine) {
-  double vote_average;
-  if (item.vote_average is int)
-    vote_average = item.vote_average.toDouble();
-  else
-    vote_average = item.vote_average;
-  String tag = getTitle(apiName) + item.poster_path + index.toString();
+Widget getMovieItemRow(
+    {BuildContext context,
+    String apiName,
+    int index,
+    double height,
+    double width,
+    int id,
+    String img,
+    String name,
+    var vote,
+    Function onTap}) {
+  String tag = getTitle(apiName) + img + index.toString();
   return Container(
     child: Expanded(
       child: Hero(
@@ -91,8 +162,7 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
                   SizedBox(
                     height: height,
                     child: ClipRRect(
-                      child: getCacheImage(
-                          ApiConstant.IMAGE_POSTER + item.poster_path),
+                      child: getCacheImage(ApiConstant.IMAGE_POSTER + img),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -100,19 +170,23 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
                       child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            splashColor: Colors.redAccent,
-                            onTap: () => navigationPush(
-                                context,
-                                DetailsMovieScreen(
-                                    apiName, index, item.id, tag)),
-                          ))),
+                              splashColor: Colors.redAccent,
+                              onTap: () {
+                                if (onTap != null) {
+                                  onTap();
+                                } else
+                                  navigationPush(
+                                      context,
+                                      DetailsMovieScreen(
+                                          apiName, index, id, tag));
+                              }))),
                 ],
               ),
               Align(
                   alignment: Alignment.topLeft,
                   child: getTxtBlackColor(
-                      msg: item.title,
-                      maxLines: maxLine,
+                      msg: name,
+                      maxLines: 1,
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
                       textAlign: TextAlign.start)),
@@ -123,11 +197,11 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
 //                      msg: item.vote_average.toString(),
 //                      fontSize: 12,
 //                      fontWeight: FontWeight.bold),
-                  RatingResult(vote_average, 12.0),
+                  RatingResult(vote, 12.0),
                   SizedBox(width: 5),
                   RatingBar(
                     itemSize: 12.0,
-                    initialRating: vote_average / 2,
+                    initialRating: vote / 2,
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: true,
@@ -135,7 +209,7 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
                     itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
                     itemBuilder: (context, _) => Icon(
                       Icons.star,
-                      color: _getBackgrountRate(item.vote_average),
+                      color: _getBackgrountRate(vote),
                     ),
                     onRatingUpdate: (rating) {
                       print(rating);

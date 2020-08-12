@@ -1,21 +1,21 @@
 class PersonMovieRespo {
-    List<Cast> cast;
-    List<Crew> crew;
+    List<PersonCast> cast;
+    List<PersonCrew> crew;
     int id;
 
     PersonMovieRespo({this.cast, this.crew, this.id});
 
     PersonMovieRespo.fromJson(Map<String, dynamic> json) {
         if (json['cast'] != null) {
-            cast = new List<Cast>();
+            cast = new List<PersonCast>();
             json['cast'].forEach((v) {
-                cast.add(new Cast.fromJson(v));
+                cast.add(new PersonCast.fromJson(v));
             });
         }
         if (json['crew'] != null) {
-            crew = new List<Crew>();
+            crew = new List<PersonCrew>();
             json['crew'].forEach((v) {
-                crew.add(new Crew.fromJson(v));
+                crew.add(new PersonCrew.fromJson(v));
             });
         }
         id = json['id'];
@@ -34,7 +34,7 @@ class PersonMovieRespo {
     }
 }
 
-class Cast {
+class PersonCast {
     String character;
     String creditId;
     String releaseDate;
@@ -52,7 +52,7 @@ class Cast {
     String overview;
     String posterPath;
 
-    Cast(
+    PersonCast(
         {this.character,
             this.creditId,
             this.releaseDate,
@@ -70,14 +70,14 @@ class Cast {
             this.overview,
             this.posterPath});
 
-    Cast.fromJson(Map<String, dynamic> json) {
+    PersonCast.fromJson(Map<String, dynamic> json) {
         character = json['character'];
         creditId = json['credit_id'];
         releaseDate = json['release_date'];
         voteCount = json['vote_count'];
         video = json['video'];
         adult = json['adult'];
-        voteAverage = json['vote_average'];
+        voteAverage = json['vote_average'].toDouble();
         title = json['title'];
         genreIds = json['genre_ids'].cast<int>();
         originalLanguage = json['original_language'];
@@ -111,7 +111,7 @@ class Cast {
     }
 }
 
-class Crew {
+class PersonCrew {
     int id;
     String department;
     String originalLanguage;
@@ -130,7 +130,7 @@ class Crew {
     String releaseDate;
     String creditId;
 
-    Crew(
+    PersonCrew(
         {this.id,
             this.department,
             this.originalLanguage,
@@ -149,7 +149,7 @@ class Crew {
             this.releaseDate,
             this.creditId});
 
-    Crew.fromJson(Map<String, dynamic> json) {
+    PersonCrew.fromJson(Map<String, dynamic> json) {
         id = json['id'];
         department = json['department'];
         originalLanguage = json['original_language'];
@@ -163,7 +163,7 @@ class Crew {
         title = json['title'];
         popularity = json['popularity'];
         genreIds = json['genre_ids'].cast<int>();
-        voteAverage = json['vote_average'];
+        voteAverage = json['vote_average'].toDouble();
         adult = json['adult'];
         releaseDate = json['release_date'];
         creditId = json['credit_id'];

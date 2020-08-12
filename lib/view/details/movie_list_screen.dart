@@ -5,6 +5,7 @@ import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/details/credits_crew_respo.dart';
 import 'package:flutterarch/data/home/now_playing_respo.dart';
+import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/data/person/tranding_person_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
@@ -65,7 +66,9 @@ class _MovieListScreenState extends State<MovieListScreen> {
       builder: (context, _, model) {
         var jsonResult = getData(apiName, model);
         if (jsonResult.status == ApiStatus.COMPLETED) {
-          return _createUi(jsonResult.data);
+          return getCount(jsonResult.data) > 0
+              ? _createUi(jsonResult.data)
+              : Container();
         } else
           return apiHandler(response: jsonResult);
       },
@@ -83,7 +86,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
       alignment: Alignment.center,
       child: StaggeredGridView.countBuilder(
         crossAxisCount: 4,
-        itemCount: getInstance(data),
+        itemCount: getCount(data),
         //results.length,
         itemBuilder: (BuildContext context, int index) => Padding(
           padding: const EdgeInsets.all(6.0),
@@ -96,18 +99,32 @@ class _MovieListScreenState extends State<MovieListScreen> {
     ));
   }
 
-  int getInstance(result) {
+  int getCount(result) {
     if (apiName == StringConst.MOVIE_CAST && result is CreditsCrewRespo)
       return result.cast.length;
     else if (apiName == StringConst.MOVIE_CREW && result is CreditsCrewRespo)
       return result.crew.length;
     else if (result is TrandingPersonRespo)
       return result.results.length;
-    else if (result is NowPlayingRespo)
-      return result.results.length;
+    else if (result is NowPlayingRespo) return result.results.length;
+    if (apiName == StringConst.PERSON_MOVIE_CAST && result is PersonMovieRespo)
+      return result.cast.length;
+    else if (apiName == StringConst.PERSON_MOVIE_CREW &&
+        result is PersonMovieRespo)
+      return result.crew.length;
     else
       return 1;
   }
+//  bool isShowViewAll(results) {
+//    if (results is NowPlayingRespo)
+//      return getCount(results) > 8 ? true : false;
+//    else if (apiName == StringConst.IMAGES && results is MovieImgRespo)
+//      return false;
+//    else if (results is MovieImgRespo)
+//      return false;
+//    else
+//      return true;
+//  }
 
   Widget getItemView(data, int index) {
     if (data is CreditsCrewRespo) return getPersonDetails(data, index);
@@ -122,10 +139,45 @@ class _MovieListScreenState extends State<MovieListScreen> {
           job: result.knownForDepartment,
           onTap: (int id) => navigationPush(context,
               PersonDetail(id: id, imgPath: result.profilePath, tag: tag)));
-    } else if (data is NowPlayingRespo)
+    } else if (data is NowPlayingRespo) {
+      Result item = data.results[index];
       return getMovieItemRow(
-          context, apiName, data.results[index], index, 240, 135, 1);
-    else
+          context: context,
+          apiName: apiName,
+          index: index,
+          height: 240,
+          width: 135,
+          id: item.id,
+          img: item.poster_path,
+          name: item.original_title,
+          vote: item.vote_average);
+    }
+    if (apiName == StringConst.PERSON_MOVIE_CAST && data is PersonMovieRespo) {
+      PersonCast item = data.cast[index];
+      return getMovieItemRow(
+          context: context,
+          apiName: apiName,
+          index: index,
+          height: 240,
+          width: 135,
+          id: item.id,
+          img: item.posterPath,
+          name: item.originalTitle,
+          vote: item.voteAverage);
+    } else if (apiName == StringConst.PERSON_MOVIE_CREW &&
+        data is PersonMovieRespo) {
+      PersonCrew item = data.crew[index];
+      return getMovieItemRow(
+          context: context,
+          apiName: apiName,
+          index: index,
+          height: 240,
+          width: 135,
+          id: item.id,
+          img: item.posterPath,
+          name: item.originalTitle,
+          vote: item.voteAverage);
+    } else
       Container(
         child: getTxt(msg: 'Data not found'),
       );
