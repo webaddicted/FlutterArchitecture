@@ -14,8 +14,18 @@ class StringConst {
   static var DUMMY_TEXT =
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
-  static String MOVIE_CAST = 'Movie Cast';
-  static String MOVIE_CREW = 'Movie Crew';
+  static const String MOVIE_CAST = 'Movie Cast';
+  static const String MOVIE_CREW = 'Movie Crew';
+
+  static const String TRANDING_PERSON_OF_WEEK = 'Tranding Person of Week';
+
+  static var BIOGRAPHY = 'Biography';
+
+  static var PERSONAL_INFO = 'Personal Info';
+
+  static var NO_DATA_FOUND = 'No Data Found';
+
+  static const String IMAGES = 'Images';
 
 //  {END TITLE}
 }

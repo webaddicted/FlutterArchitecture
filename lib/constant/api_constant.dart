@@ -25,6 +25,7 @@ class ApiConstant {
   static const RECOMMENDATIONS_MOVIE = '/recommendations';
   static const SIMILAR_MOVIES = '/similar';
   static const KEYWORDS_MOVIE_LIST = 'keywords/';
+  static const MOVIE_IMAGES = '/images';
 
   static var TRENDING_PERSONS = "trending/person/week";
   static var PERSONS_DETAILS = "person/";

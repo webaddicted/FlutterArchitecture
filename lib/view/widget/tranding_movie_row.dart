@@ -15,8 +15,9 @@ import 'package:scoped_model/scoped_model.dart';
 
 class TrandingMovieRow extends StatelessWidget {
   final apiName;
+  final movieId;
 
-  TrandingMovieRow(this.apiName);
+  TrandingMovieRow({@required this.apiName, this.movieId});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,11 @@ class TrandingMovieRow extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context: context, apiName: apiName),
+        getHeading(
+            context: context,
+            apiName: apiName,
+            movieId: movieId,
+            isShowViewAll: results.length > 8 ? true : false),
         SizedBox(height: 10),
         SizedBox(
           height: 240.0,
@@ -67,10 +72,16 @@ class TrandingMovieRow extends StatelessWidget {
 
 Widget getMovieItemRow(BuildContext context, String apiName, Result item,
     int index, double height, double width, int maxLine) {
+  double vote_average;
+  if (item.vote_average is int)
+    vote_average = item.vote_average.toDouble();
+  else
+    vote_average = item.vote_average;
+  String tag = getTitle(apiName) + item.poster_path + index.toString();
   return Container(
     child: Expanded(
       child: Hero(
-        tag: getTitle(apiName) + index.toString(),
+        tag: tag,
         child: Container(
           width: width,
           child: Column(
@@ -93,7 +104,7 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
                             onTap: () => navigationPush(
                                 context,
                                 DetailsMovieScreen(
-                                    apiName, index, item.id.toString())),
+                                    apiName, index, item.id, tag)),
                           ))),
                 ],
               ),
@@ -112,13 +123,11 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
 //                      msg: item.vote_average.toString(),
 //                      fontSize: 12,
 //                      fontWeight: FontWeight.bold),
-                  RatingResult(item.vote_average, 12.0),
-                  SizedBox(
-                    width: 5.0,
-                  ),
+                  RatingResult(vote_average, 12.0),
+                  SizedBox(width: 5),
                   RatingBar(
                     itemSize: 12.0,
-                    initialRating: item.vote_average / 2,
+                    initialRating: vote_average / 2,
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: true,
@@ -141,6 +150,7 @@ Widget getMovieItemRow(BuildContext context, String apiName, Result item,
     ),
   );
 }
+
 Color _getBackgrountRate(double rate) {
   if (rate < 5.0) {
     return Colors.red;
@@ -153,7 +163,11 @@ Color _getBackgrountRate(double rate) {
   }
 }
 
-Widget getHeading({BuildContext context, String apiName, bool isShowViewAll}) {
+Widget getHeading(
+    {BuildContext context,
+    String apiName,
+    int movieId,
+    bool isShowViewAll = true}) {
   return Padding(
     padding: const EdgeInsets.only(left: 8, right: 8),
     child: Row(
@@ -161,16 +175,17 @@ Widget getHeading({BuildContext context, String apiName, bool isShowViewAll}) {
       children: <Widget>[
         getTxtBlackColor(
             msg: getTitle(apiName), fontSize: 19, fontWeight: FontWeight.w700),
-//        if (isShowViewAll)
-        GestureDetector(
-          onTap: () {
-            navigationPush(context, MovieListScreen(apiName));
-          },
-          child: getTxtColor(
-              msg: StringConst.VIEW_ALL,
-              txtColor: Colors.blue,
-              fontWeight: FontWeight.w800),
-        )
+        if (isShowViewAll)
+          GestureDetector(
+            onTap: () {
+              navigationPush(
+                  context, MovieListScreen(apiName: apiName, movieId: movieId));
+            },
+            child: getTxtColor(
+                msg: StringConst.VIEW_ALL,
+                txtColor: Colors.blue,
+                fontWeight: FontWeight.w800),
+          )
       ],
     ),
   );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class RatingResult extends StatelessWidget {
   final rate;
-  double fontSize;
+  var fontSize;
 
   RatingResult([this.rate, this.fontSize = 10.0]);
 
@@ -26,7 +26,7 @@ class RatingResult extends StatelessWidget {
     );
   }
 
-  Color _getBackgrountRate(double rate) {
+  Color _getBackgrountRate(var rate) {
     if (rate < 5.0) {
       return Colors.red;
     } else if (rate < 6.8) {

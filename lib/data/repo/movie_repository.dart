@@ -6,11 +6,11 @@ import 'package:flutterarch/data/bean/movie_respo.dart';
 import 'package:flutterarch/data/details/credits_crew_respo.dart';
 import 'package:flutterarch/data/details/keyword_respo.dart';
 import 'package:flutterarch/data/details/movie_details_respo.dart';
+import 'package:flutterarch/data/details/movie_img_respo.dart';
 import 'package:flutterarch/data/details/video_respo.dart';
 import 'package:flutterarch/data/home/movie_cat_respo.dart';
 import 'package:flutterarch/data/home/now_playing_respo.dart';
 import 'package:flutterarch/data/person/person_detail_respo.dart';
-import 'package:flutterarch/data/person/person_img_respo.dart';
 import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/data/person/tranding_person_respo.dart';
 import 'package:flutterarch/utils/apiutils/api_base_helper.dart';
@@ -68,10 +68,10 @@ class MovieRepository {
     }
   }
 
-  movieDetails(String movieId) async {
+  movieDetails(int movieId) async {
     try {
       final response = await apiHelper.getWithParam(
-          "${ApiConstant.MOVIE_DETAILS + movieId}",
+          "${ApiConstant.MOVIE_DETAILS + movieId.toString()}",
           CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(response,
           MovieDetailsRespo.fromJson(jsonDecode(response.toString())));
@@ -84,10 +84,10 @@ class MovieRepository {
     }
   }
 
-  movieCrewCast(String movieId) async {
+  movieCrewCast(int movieId) async {
     try {
       final response = await apiHelper.getWithParam(
-          "${ApiConstant.MOVIE_DETAILS + movieId + ApiConstant.CREDITS_CREW}",
+          "${ApiConstant.MOVIE_DETAILS + movieId.toString() + ApiConstant.CREDITS_CREW}",
           CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(
           response, CreditsCrewRespo.fromJson(jsonDecode(response.toString())));
@@ -100,10 +100,10 @@ class MovieRepository {
     }
   }
 
-  movieKeyword(String movieId) async {
+  movieKeyword(int movieId) async {
     try {
       final response = await apiHelper.getWithParam(
-          "${ApiConstant.MOVIE_DETAILS + movieId + ApiConstant.MOVIE_KEYWORDS}",
+          "${ApiConstant.MOVIE_DETAILS + movieId.toString() + ApiConstant.MOVIE_KEYWORDS}",
           CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(
           response, KeywordRespo.fromJson(jsonDecode(response.toString())));
@@ -116,10 +116,26 @@ class MovieRepository {
     }
   }
 
-  movieVideo(String movieId) async {
+  movieImg(int movieId) async {
     try {
       final response = await apiHelper.getWithParam(
-          "${ApiConstant.MOVIE_DETAILS + movieId + ApiConstant.MOVIE_VIDEOS}",
+          "${ApiConstant.MOVIE_DETAILS + movieId.toString() + ApiConstant.MOVIE_IMAGES}",
+          CommonMovieReq.empty().toJson());
+      return ApiResponse.returnResponse(
+          response, MovieImgRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+
+  movieVideo(int movieId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.MOVIE_DETAILS + movieId.toString() + ApiConstant.MOVIE_VIDEOS}",
           CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(
           response, VideoRespo.fromJson(jsonDecode(response.toString())));
@@ -147,10 +163,10 @@ class MovieRepository {
     }
   }
 
-  fetchPersonDetail() async {
+  fetchPersonDetail(int id) async {
     try {
       final response = await apiHelper.getWithParam(
-          "${ApiConstant.PERSONS_DETAILS}", CommonMovieReq.empty().toJson());
+          "${ApiConstant.PERSONS_DETAILS+id.toString()}", CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(response,
           PersonDetailRespo.fromJson(jsonDecode(response.toString())));
     } catch (error, stacktrace) {
@@ -184,7 +200,7 @@ class MovieRepository {
           "${ApiConstant.PERSONS_DETAILS + personId.toString() + ApiConstant.PERSONS_IMAGES}",
           CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(response,
-          PersonImgRespo.fromJson(jsonDecode(response.toString())));
+          MovieImgRespo.fromJson(jsonDecode(response.toString())));
     } catch (error, stacktrace) {
       return ApiResponse.error(
           errCode: ApiRespoCode.known,

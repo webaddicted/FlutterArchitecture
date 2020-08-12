@@ -35,7 +35,7 @@ class MovieKeyword extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context: context, apiName: castCrew),
+        getHeading(context: context, apiName: castCrew,isShowViewAll: false),
         SizedBox(height: 8),
         getPersonItem(context, data)
       ],

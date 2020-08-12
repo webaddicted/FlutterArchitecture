@@ -7,13 +7,15 @@ import 'package:flutterarch/data/details/credits_crew_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
+import 'package:flutterarch/view/person/person_detail.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class MovieCastCrew extends StatelessWidget {
   String castCrew;
+  int movieId;
 
-  MovieCastCrew(this.castCrew);
+  MovieCastCrew({this.castCrew, this.movieId});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class MovieCastCrew extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context: context, apiName: castCrew),
+        getHeading(context: context, apiName: castCrew, movieId: movieId),
         SizedBox(height: 8),
         getPersonItem(context, data)
       ],
@@ -65,65 +67,80 @@ class MovieCastCrew extends StatelessWidget {
           int id = castCrew == StringConst.MOVIE_CAST
               ? results.cast[index].id
               : results.crew[index].id;
-          return castCrewItem(id, name, image, chatactor);
+          var tag = castCrew + 'cast_view' + index.toString();
+          return castCrewItem(
+              id: id,
+              tag: tag,
+              name: name,
+              image: image,
+              job: chatactor,
+              onTap: (int id) =>navigationPush(context, PersonDetail(id: id, imgPath: image, tag: tag)));
         },
       ),
     );
   }
+}
 
-  Widget castCrewItem(int id, String name, String image, String job) {
-    return Container(
-      padding: EdgeInsets.only(top: 10.0),
-      width: 100.0,
-      child: GestureDetector(
-        onTap: () {},
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            image == null
-                ? Hero(
-                    tag: id,
-                    child: Container(
+Widget castCrewItem(
+    {int id,
+    String name,
+    String image,
+    String job,
+    String tag,
+    Function onTap}) {
+  return Container(
+    padding: EdgeInsets.only(top: 10.0),
+    width: 100.0,
+    child: GestureDetector(
+      onTap: () {
+        onTap(id);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          image == null
+              ? Hero(
+                  tag: tag,
+                  child: Container(
+                    width: 80.0,
+                    height: 80.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle, color: ColorConst.APP_COLOR),
+                    child: Icon(
+                      Icons.person_pin,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : Hero(
+                  tag: tag,
+                  child: Container(
                       width: 80.0,
                       height: 80.0,
                       decoration: new BoxDecoration(
-                          shape: BoxShape.circle, color: ColorConst.APP_COLOR),
-                      child: Icon(
-                        Icons.person_pin,
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                : Hero(
-                    tag: id,
-                    child: Container(
-                        width: 80.0,
-                        height: 80.0,
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  ApiConstant.IMAGE_POSTER + image)),
-                        )),
-                  ),
-            SizedBox(height: 5.0),
-            getTxtBlackColor(
-                msg: name,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                maxLines: 1,
-                textAlign: TextAlign.center),
-            SizedBox(height: 3.0),
-            getTxtBlackColor(
-                msg: job,
-                fontSize: 12,
-                maxLines: 1,
-                fontWeight: FontWeight.w600,
-                textAlign: TextAlign.center),
-          ],
-        ),
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                            fit: BoxFit.cover,
+                            image:
+                                NetworkImage(ApiConstant.IMAGE_POSTER + image)),
+                      )),
+                ),
+          SizedBox(height: 5.0),
+          getTxtBlackColor(
+              msg: name,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              maxLines: 1,
+              textAlign: TextAlign.center),
+          SizedBox(height: 3.0),
+          getTxtBlackColor(
+              msg: job,
+              fontSize: 12,
+              maxLines: 1,
+              fontWeight: FontWeight.w600,
+              textAlign: TextAlign.center),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }

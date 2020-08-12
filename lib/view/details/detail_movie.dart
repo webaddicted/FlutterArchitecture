@@ -6,35 +6,37 @@ import 'package:flutterarch/data/details/movie_details_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
-import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/widget/genre_movie.dart';
 import 'package:flutterarch/view/widget/movie_cast_crew.dart';
 import 'package:flutterarch/view/widget/movie_keyword.dart';
 import 'package:flutterarch/view/widget/rating_result.dart';
+import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:flutterarch/view/widget/video_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class DetailsMovieScreen extends StatefulWidget {
   final apiName;
+  final tag;
   final index;
   final movieId;
 
-  DetailsMovieScreen(this.apiName, this.index, this.movieId);
+  DetailsMovieScreen(this.apiName, this.index, this.movieId, this.tag);
 
   @override
   _DetailsMovieScreenState createState() =>
-      _DetailsMovieScreenState(apiName, index, movieId);
+      _DetailsMovieScreenState(apiName, index, movieId, tag);
 }
 
 class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
   final apiName;
+  final tag;
   final index;
   final movieId;
   MovieModel model;
   final double expandedHeight = 350.0;
 
-  _DetailsMovieScreenState(this.apiName, this.index, this.movieId);
+  _DetailsMovieScreenState(this.apiName, this.index, this.movieId, this.tag);
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
     model.fetchSimilarMovie(movieId);
     model.movieKeyword(movieId);
     model.movieVideo(movieId);
-
+    model.movieImg(movieId);
   }
 
   @override
@@ -93,7 +95,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
       height: expandedHeight + 50,
       width: double.infinity,
       child: Hero(
-          tag: getTitle(apiName) + index.toString(),
+          tag: tag,
           child: Container(
             child:
                 getCacheImage(ApiConstant.IMAGE_ORIG_POSTER + data.posterPath),
@@ -155,13 +157,14 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _contentTitle(data),
-          MovieCastCrew(StringConst.MOVIE_CAST),
-          MovieCastCrew(StringConst.MOVIE_CREW),
+          SifiMovieRow(ApiConstant.MOVIE_IMAGES),
+          MovieCastCrew(castCrew: StringConst.MOVIE_CAST, movieId: movieId),
+          MovieCastCrew(castCrew: StringConst.MOVIE_CREW, movieId: movieId),
 //          getHeading(context: context, apiName: 'Keyword'),
           VideoView('Trailer'),
           MovieKeyword('Keyword'),
-          TrandingMovieRow(ApiConstant.RECOMMENDATIONS_MOVIE),
-          TrandingMovieRow(ApiConstant.SIMILAR_MOVIES),
+          TrandingMovieRow(apiName:ApiConstant.RECOMMENDATIONS_MOVIE, movieId:movieId),
+          TrandingMovieRow(apiName:ApiConstant.SIMILAR_MOVIES, movieId:movieId),
         ],
       ),
     );
@@ -270,7 +273,8 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
     return Expanded(
       child: ListView(
         padding: const EdgeInsets.all(20.0),
-        children: _getKeywordListings(), // <<<<< Note this change for the return type
+        children:
+            _getKeywordListings(), // <<<<< Note this change for the return type
       ),
     );
   }
@@ -284,9 +288,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
           title: const Text('Lafayette'),
           value: "c",
           groupValue: "x",
-          onChanged: (_) {
-
-          },
+          onChanged: (_) {},
         ),
       );
     }

@@ -40,7 +40,7 @@ class VideoView extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context: context, apiName: apiName),
+        getHeading(context: context, apiName: apiName, isShowViewAll: false),
         SizedBox(height: 10),
         SizedBox(
           height: 190.0,
@@ -76,6 +76,13 @@ class VideoView extends StatelessWidget {
                                 ),
                               ),
                               Positioned.fill(
+                                child: Icon(
+                                  Icons.play_circle_outline,
+                                  color: ColorConst.WHITE_COLOR,
+                                  size: 50.0,
+                                ),
+                              ),
+                              Positioned.fill(
                                   child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
@@ -85,9 +92,8 @@ class VideoView extends StatelessWidget {
                                                 context,
                                                 VideoPlayerScreen(
                                                   controller:
-                                                      YoutubePlayerController(
-                                                    initialVideoId:
-                                                        'Qu9kmSQwfZw',
+                                                  YoutubePlayerController(
+                                                    initialVideoId: item.key,
                                                     flags: YoutubePlayerFlags(
                                                       autoPlay: true,
 //                  mute: true,
@@ -95,14 +101,6 @@ class VideoView extends StatelessWidget {
                                                   ),
                                                 ));
                                           }))),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.play_circle_outline,
-                                  color: ColorConst.WHITE_COLOR,
-                                  size: 30.0,
-                                ),
-                              )
                             ],
                           ),
                         ),

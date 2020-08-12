@@ -75,13 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               SizedBox(height: 10),
               CarouselView(),
-              TrandingMovieRow(ApiConstant.TRENDING_MOVIE_LIST),
+              TrandingMovieRow(apiName: ApiConstant.TRENDING_MOVIE_LIST),
               MovieCate(),
-              TrandingMovieRow(ApiConstant.POPULAR_MOVIES),
+              TrandingMovieRow(apiName: ApiConstant.POPULAR_MOVIES),
               SifiMovieRow(ApiConstant.UPCOMING_MOVIE),
-              TrandingMovieRow(ApiConstant.DISCOVER_MOVIE),
+              TrandingMovieRow(apiName: ApiConstant.DISCOVER_MOVIE),
               TrandingPerson(),
-              TrandingMovieRow(ApiConstant.TOP_RATED),
+              TrandingMovieRow(apiName: ApiConstant.TOP_RATED),
             ],
           ),
         ),
@@ -108,12 +108,15 @@ String getTitle(String apiName) {
       return 'Recommendations';
     case ApiConstant.SIMILAR_MOVIES:
       return 'Similar Movie';
+    case ApiConstant.MOVIE_IMAGES:
+    case StringConst.IMAGES:
+      return StringConst.IMAGES;
     default:
       return apiName;
   }
 }
 
-callMovieApi(String apiName, MovieModel model, {String movieId}) {
+callMovieApi(String apiName, MovieModel model, {int movieId}) {
   switch (apiName) {
     case ApiConstant.POPULAR_MOVIES:
       return model.fetchPopularMovie();
@@ -131,6 +134,13 @@ callMovieApi(String apiName, MovieModel model, {String movieId}) {
       return model.fetchRecommendMovie(movieId);
     case ApiConstant.SIMILAR_MOVIES:
       return model.fetchSimilarMovie(movieId);
+    case ApiConstant.SIMILAR_MOVIES:
+      return model.fetchSimilarMovie(movieId);
+    case StringConst.MOVIE_CAST:
+    case StringConst.MOVIE_CREW:
+      return model.movieCrewCast(movieId);
+    case StringConst.TRANDING_PERSON_OF_WEEK:
+      return model.fetchTrandingPerson();
   }
 }
 
@@ -152,5 +162,14 @@ getData(String apiName, MovieModel model) {
       return model.recommendMovieRespo;
     case ApiConstant.SIMILAR_MOVIES:
       return model.similarMovieRespo;
+    case StringConst.MOVIE_CAST:
+    case StringConst.MOVIE_CREW:
+      return model.getMovieCrew;
+    case ApiConstant.MOVIE_IMAGES:
+      return model.movieImgRespo;
+    case StringConst.IMAGES:
+      return model.personImageRespo;
+    case StringConst.TRANDING_PERSON_OF_WEEK:
+      return model.trandingPersonRespo;
   }
 }

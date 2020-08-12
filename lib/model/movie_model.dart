@@ -3,11 +3,11 @@ import 'package:flutterarch/data/bean/movie_respo.dart';
 import 'package:flutterarch/data/details/credits_crew_respo.dart';
 import 'package:flutterarch/data/details/keyword_respo.dart';
 import 'package:flutterarch/data/details/movie_details_respo.dart';
+import 'package:flutterarch/data/details/movie_img_respo.dart';
 import 'package:flutterarch/data/details/video_respo.dart';
 import 'package:flutterarch/data/home/movie_cat_respo.dart';
 import 'package:flutterarch/data/home/now_playing_respo.dart';
 import 'package:flutterarch/data/person/person_detail_respo.dart';
-import 'package:flutterarch/data/person/person_img_respo.dart';
 import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/data/person/tranding_person_respo.dart';
 import 'package:flutterarch/data/repo/movie_repository.dart';
@@ -30,15 +30,18 @@ class MovieModel extends Model {
   ApiResponse<MovieDetailsRespo> _movieDetailRespo;
   ApiResponse<CreditsCrewRespo> _movieCrewRespo;
   ApiResponse<KeywordRespo> _movieKeywordRespo;
+  ApiResponse<MovieImgRespo> _movieImgRespo;
   ApiResponse<VideoRespo> _movieVideoRespo;
   ApiResponse<NowPlayingRespo> _recommendMovieRespo;
   ApiResponse<NowPlayingRespo> _similarMovieRespo;
   ApiResponse<NowPlayingRespo> _keywordMovieListRespo;
-//    {END MOVIE DETAILS PAGE API}
+
+  //    {END MOVIE DETAILS PAGE API}
   ApiResponse<TrandingPersonRespo> _trandingPersonRespo;
   ApiResponse<PersonDetailRespo> _personDetailRespo;
   ApiResponse<PersonMovieRespo> _personMovieRespo;
-  ApiResponse<PersonImgRespo> _personImageRespo;
+  ApiResponse<MovieImgRespo> _personImageRespo;
+
 
 
   MovieModel() {
@@ -146,7 +149,7 @@ class MovieModel extends Model {
 
   ApiResponse<MovieDetailsRespo> get getMovieDetails => _movieDetailRespo;
 
-  movieDetails(String movieId) async {
+  movieDetails(int movieId) async {
     _movieDetailRespo = ApiResponse.loading();
     notifyListeners();
     _movieDetailRespo =
@@ -156,7 +159,7 @@ class MovieModel extends Model {
 
   ApiResponse<CreditsCrewRespo> get getMovieCrew => _movieCrewRespo;
 
-  movieCrewCast(String movieId) async {
+  movieCrewCast(int movieId) async {
     _movieCrewRespo = ApiResponse.loading();
     notifyListeners();
     _movieCrewRespo =
@@ -165,7 +168,7 @@ class MovieModel extends Model {
   }
   ApiResponse<KeywordRespo> get getMovieKeyword => _movieKeywordRespo;
 
-  movieKeyword(String movieId) async {
+  movieKeyword(int movieId) async {
     _movieKeywordRespo = ApiResponse.loading();
     notifyListeners();
     _movieKeywordRespo =
@@ -174,7 +177,7 @@ class MovieModel extends Model {
   }
   ApiResponse<VideoRespo> get getMovieVideo => _movieVideoRespo;
 
-  movieVideo(String movieId) async {
+  movieVideo(int movieId) async {
     _movieVideoRespo = ApiResponse.loading();
     notifyListeners();
     _movieVideoRespo =
@@ -184,31 +187,39 @@ class MovieModel extends Model {
 
   ApiResponse<NowPlayingRespo> get recommendMovieRespo => _recommendMovieRespo;
 
-  fetchRecommendMovie(String movieId) async {
+  fetchRecommendMovie(int movieId) async {
     _recommendMovieRespo = ApiResponse.loading();
     notifyListeners();
     _recommendMovieRespo =
-    await _movieRepo.fetchNowPlaying(endPoint: ApiConstant.MOVIE_DETAILS+movieId+ApiConstant.RECOMMENDATIONS_MOVIE);
+    await _movieRepo.fetchNowPlaying(endPoint: ApiConstant.MOVIE_DETAILS+movieId.toString()+ApiConstant.RECOMMENDATIONS_MOVIE);
     notifyListeners();
   }
 
   ApiResponse<NowPlayingRespo> get similarMovieRespo => _similarMovieRespo;
 
-  fetchSimilarMovie(String movieId) async {
+  fetchSimilarMovie(int movieId) async {
     _similarMovieRespo = ApiResponse.loading();
     notifyListeners();
     _similarMovieRespo =
-    await _movieRepo.fetchNowPlaying(endPoint: ApiConstant.MOVIE_DETAILS+movieId+ApiConstant.SIMILAR_MOVIES);
+    await _movieRepo.fetchNowPlaying(endPoint: ApiConstant.MOVIE_DETAILS+movieId.toString()+ApiConstant.SIMILAR_MOVIES);
     notifyListeners();
   }
+  ApiResponse<MovieImgRespo> get movieImgRespo => _movieImgRespo;
 
+  movieImg(int movieId) async {
+    _movieImgRespo = ApiResponse.loading();
+    notifyListeners();
+    _movieImgRespo =
+    await _movieRepo.movieImg(movieId);
+    notifyListeners();
+  }
   ApiResponse<NowPlayingRespo> get keywordMovieListRespo => _keywordMovieListRespo;
 
-  fetchKeywordMovieList(String keywordId) async {
+  fetchKeywordMovieList(int keywordId) async {
     _keywordMovieListRespo = ApiResponse.loading();
     notifyListeners();
     _keywordMovieListRespo =
-    await _movieRepo.fetchNowPlaying(endPoint: ApiConstant.KEYWORDS_MOVIE_LIST+keywordId);
+    await _movieRepo.fetchNowPlaying(endPoint: ApiConstant.KEYWORDS_MOVIE_LIST+keywordId.toString());
     notifyListeners();
   }
 
@@ -224,11 +235,11 @@ class MovieModel extends Model {
 
   ApiResponse<PersonDetailRespo> get personDetailRespo => _personDetailRespo;
 
-  fetchPersonDetail() async {
+  fetchPersonDetail(int id) async {
     _personDetailRespo = ApiResponse.loading();
     notifyListeners();
     _personDetailRespo =
-    await _movieRepo.fetchPersonDetail();
+    await _movieRepo.fetchPersonDetail(id);
     notifyListeners();
   }
 
@@ -242,7 +253,7 @@ class MovieModel extends Model {
     notifyListeners();
   }
 
-  ApiResponse<PersonImgRespo> get personImageRespo => _personImageRespo;
+  ApiResponse<MovieImgRespo> get personImageRespo => _personImageRespo;
 
   fetchPersonImage(int personId) async {
     _personImageRespo = ApiResponse.loading();
