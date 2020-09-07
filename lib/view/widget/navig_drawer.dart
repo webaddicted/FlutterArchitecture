@@ -1,17 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/category/category_screen.dart';
+import 'package:flutterarch/view/details/movie_list_screen.dart';
 
 class NavDrawerView extends StatelessWidget {
-   BuildContext _context;
+  BuildContext _context;
+
   @override
   Widget build(BuildContext context) {
     this._context = context;
     return _drawerView();
   }
-  Widget _drawerView() {
 
+  Widget _drawerView() {
     return new Container(
       width: double.infinity,
       child: SingleChildScrollView(
@@ -37,17 +40,19 @@ class NavDrawerView extends StatelessWidget {
                 Padding(padding: EdgeInsets.only(top: 30)),
                 _getDrawerItem("Home"),
                 getDivider(),
-                _getDrawerItem("Cart"),
+                _getDrawerItem("Category"),
                 getDivider(),
-                _getDrawerItem("Profile"),
+                _getDrawerItem("Tranding Movie"),
                 getDivider(),
-                _getDrawerItem("Settings"),
+                _getDrawerItem("Popular Movie"),
+                getDivider(),
+                _getDrawerItem("Upcoming Movie"),
                 getDivider(),
                 _getDrawerItem("Contact us"),
                 getDivider(),
                 _getDrawerItem("About us"),
                 getDivider(),
-                _getDrawerItem("exit"),
+                _getDrawerItem("Exit"),
                 getDivider(),
               ],
             ),
@@ -56,6 +61,7 @@ class NavDrawerView extends StatelessWidget {
       ),
     );
   }
+
   Widget _getDrawerItem(String title) {
     return GestureDetector(
       onTap: () {
@@ -66,8 +72,8 @@ class NavDrawerView extends StatelessWidget {
         child: Container(
           width: double.infinity,
           child: Padding(
-            padding:
-            EdgeInsets.only(top: 17.0, bottom: 17.0, left: 10.0, right: 3.0),
+            padding: EdgeInsets.only(
+                top: 17.0, bottom: 17.0, left: 10.0, right: 3.0),
             child: Text(
               title,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -79,11 +85,34 @@ class NavDrawerView extends StatelessWidget {
   }
 
   void _navigateOnNextScreen(String title) {
-//    switch(title){
-//      case "Home":
     Navigator.of(_context).pop();
-    navigationPush(_context, CategoryMovie());
-//        break;
-//    }
+    switch (title) {
+      case "Home":
+        // navigationPush(_context, CategoryMovie());
+        break;
+      case "Category":
+        navigationPush(
+            _context, MovieListScreen(apiName: ApiConstant.GENRES_LIST));
+        break;
+      case "Tranding Movie":
+        navigationPush(
+            _context, MovieListScreen(apiName: ApiConstant.TRENDING_MOVIE_LIST));
+        break;
+      case "Popular Movie":
+        navigationPush(
+            _context, MovieListScreen(apiName: ApiConstant.POPULAR_MOVIES));
+        break;
+      case "Upcoming Movie":
+        navigationPush(
+            _context, MovieListScreen(apiName: ApiConstant.UPCOMING_MOVIE));
+        break;
+      case "Contact us":
+        break;
+      case "About us":
+        break;
+      case "Exit":
+        break;
+
+    }
   }
 }

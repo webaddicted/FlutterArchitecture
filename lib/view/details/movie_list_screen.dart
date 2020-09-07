@@ -11,6 +11,7 @@ import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/data/person/tranding_person_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
+import 'package:flutterarch/utils/global_utility.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/person/person_detail.dart';
@@ -183,7 +184,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
       String tag = getTitle(apiName) + item.name + index.toString();
       return getLargeItem(
           context: context,
-          img: ApiConstant.DEMO_IMG,
+          img: getCategoryMovie()[index],
           //ApiConstant.IMAGE_POSTER + "item.filePath",
           screenSpace: 10,
           name: item.name,

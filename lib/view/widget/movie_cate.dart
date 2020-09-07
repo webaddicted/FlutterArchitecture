@@ -6,6 +6,7 @@ import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/home/movie_cat_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
+import 'package:flutterarch/utils/global_utility.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/movie_list_screen.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
@@ -36,14 +37,14 @@ class MovieCate extends StatelessWidget {
         getHeading(context: context, apiName: ApiConstant.GENRES_LIST),
         SizedBox(height: 10),
         SizedBox(
-          height: 120,
+          height: 150,
           child: Container(
             child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: genres.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return getCatRow(context, genres[index]);
+                  return getCatRow(context,index, genres[index]);
                 }),
           ),
         ),
@@ -51,7 +52,7 @@ class MovieCate extends StatelessWidget {
     );
   }
 
-  Widget getCatRow(BuildContext context, Genres item) {
+  Widget getCatRow(BuildContext context,int index, Genres item) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -59,15 +60,15 @@ class MovieCate extends StatelessWidget {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                loadCircleImg(ApiConstant.DEMO_IMG, 0, 80),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(80),
-                  child: Container(
-                    height: 80,
-                    width: 80,
-                    color: ColorConst.BLACK_FADE,
-                  ),
-                ),
+                loadCircleImg(getCategoryMovie()[index], 0, 100),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(100),
+                //   child: Container(
+                //     height: 100,
+                //     width: 100,
+                //     color: ColorConst.BLACK_FADE,
+                //   ),
+                // ),
                 Positioned.fill(
                     child: Material(
                         color: Colors.transparent,
