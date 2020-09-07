@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutterarch/constant/color_const.dart';
+import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/details/movie_details_respo.dart';
+import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
+import 'package:flutterarch/view/details/movie_list_screen.dart';
 
 class GenreMovie extends StatelessWidget {
   const GenreMovie({
@@ -37,8 +40,13 @@ class GenreMovie extends StatelessWidget {
             border: Border.all(
               color: ColorConst.APP_COLOR,
             ),
-            pressEnabled: false,
             onLongPressed: null,
+            onPressed: (datte) => navigationPush(
+                context,
+                MovieListScreen(
+                    apiName: StringConst.MOVIE_CATEGORY,
+                    dynamicList: item.name,
+                    movieId: item.id))
           );
         },
       ),

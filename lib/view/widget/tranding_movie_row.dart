@@ -103,7 +103,7 @@ class TrandingMovieRow extends StatelessWidget {
           height: 185,
           width: 125,
           id: item.id,
-          img: item.poster_path,
+          img: item.poster_path==null?"":item.poster_path,
           name: item.original_title,
           vote: item.vote_average);
     } else if (apiName == StringConst.PERSON_MOVIE_CAST &&
@@ -116,7 +116,7 @@ class TrandingMovieRow extends StatelessWidget {
           height: 185,
           width: 125,
           id: item.id,
-          img: item.posterPath,
+          img: item.posterPath==null?"":item.posterPath,
           name: item.originalTitle,
           vote: item.voteAverage);
     } else if (apiName == StringConst.PERSON_MOVIE_CREW &&
@@ -129,7 +129,7 @@ class TrandingMovieRow extends StatelessWidget {
           height: 185,
           width: 125,
           id: item.id,
-          img: item.posterPath,
+          img: item.posterPath==null?"":item.posterPath,
           name: item.originalTitle,
           vote: item.voteAverage);
     } else
@@ -162,7 +162,7 @@ Widget getMovieItemRow(
                   SizedBox(
                     height: height,
                     child: ClipRRect(
-                      child: getCacheImage(ApiConstant.IMAGE_POSTER + img),
+                      child: getCacheImage(ApiConstant.IMAGE_POSTER + img.toString()),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),

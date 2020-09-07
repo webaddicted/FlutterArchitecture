@@ -46,7 +46,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
     model.movieCrewCast(movieId);
     model.fetchRecommendMovie(movieId);
     model.fetchSimilarMovie(movieId);
-    model.movieKeyword(movieId);
+    model.keywordList(movieId);
     model.movieVideo(movieId);
     model.movieImg(movieId);
   }
@@ -98,7 +98,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
           tag: tag,
           child: Container(
             child:
-                getCacheImage(ApiConstant.IMAGE_ORIG_POSTER + data.posterPath),
+                getCacheImage(ApiConstant.IMAGE_ORIG_POSTER + data.posterPath.toString()),
           )),
     );
   }
@@ -160,7 +160,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
           SifiMovieRow(ApiConstant.MOVIE_IMAGES),
           MovieCastCrew(castCrew: StringConst.MOVIE_CAST, movieId: movieId),
           MovieCastCrew(castCrew: StringConst.MOVIE_CREW, movieId: movieId),
-          getHeading(context: context, apiName: 'Keyword'),
+          // getHeading(context: context, apiName: 'Keyword'),
           VideoView('Trailer'),
           MovieKeyword('Keyword'),
           TrandingMovieRow(apiName:ApiConstant.RECOMMENDATIONS_MOVIE, movieId:movieId),
@@ -234,12 +234,10 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
                 _contentDescriptionAbout('Revenue', '\$${_dataMovie.revenue!=null?_dataMovie.revenue:''}'),
             ],
           ),
-          if(_dataMovie.backdropPath!=null)
           Container(
               width: 80,
               height: 125,
-              child: getCacheImage(ApiConstant.IMAGE_POSTER +
-                  _dataMovie.backdropPath!=null?_dataMovie.backdropPath:'')
+              child: getCacheImage(ApiConstant.IMAGE_POSTER + _dataMovie.backdropPath.toString())
               ),
         ],
       ),

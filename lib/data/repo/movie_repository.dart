@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutterarch/constant/api_constant.dart';
+import 'package:flutterarch/data/bean/category_movie_req.dart';
 import 'package:flutterarch/data/bean/comon_movie_req.dart';
 import 'package:flutterarch/data/bean/movie_req.dart';
 import 'package:flutterarch/data/bean/movie_respo.dart';
@@ -100,7 +101,7 @@ class MovieRepository {
     }
   }
 
-  movieKeyword(int movieId) async {
+  keywordList(int movieId) async {
     try {
       final response = await apiHelper.getWithParam(
           "${ApiConstant.MOVIE_DETAILS + movieId.toString() + ApiConstant.MOVIE_KEYWORDS}",
@@ -201,6 +202,21 @@ class MovieRepository {
           CommonMovieReq.empty().toJson());
       return ApiResponse.returnResponse(response,
           MovieImgRespo.fromJson(jsonDecode(response.toString())));
+    } catch (error, stacktrace) {
+      return ApiResponse.error(
+          errCode: ApiRespoCode.known,
+          errMsg: error.toString(),
+          errBdy: stacktrace.toString(),
+          data: null);
+    }
+  }
+  fetchCategoryMovie(int catMovieId) async {
+    try {
+      final response = await apiHelper.getWithParam(
+          "${ApiConstant.DISCOVER_MOVIE}",
+          CategoryMovieReq.empty(catMovieId.toString()).toJson());
+      return ApiResponse.returnResponse(response,
+          NowPlayingRespo.fromJson(jsonDecode(response.toString())));
     } catch (error, stacktrace) {
       return ApiResponse.error(
           errCode: ApiRespoCode.known,

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/details/credits_crew_respo.dart';
+import 'package:flutterarch/data/home/movie_cat_respo.dart';
 import 'package:flutterarch/data/home/now_playing_respo.dart';
 import 'package:flutterarch/data/person/person_movie_respo.dart';
 import 'package:flutterarch/data/person/tranding_person_respo.dart';
@@ -13,27 +15,28 @@ import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/person/person_detail.dart';
 import 'package:flutterarch/view/widget/movie_cast_crew.dart';
+import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class MovieListScreen extends StatefulWidget {
-  String apiName;
+  String apiName, dynamicList;
   int movieId;
 
-  MovieListScreen({this.apiName, this.movieId});
+  MovieListScreen({this.apiName, this.dynamicList, this.movieId});
 
   @override
   _MovieListScreenState createState() =>
-      _MovieListScreenState(apiName, movieId);
+      _MovieListScreenState(apiName, dynamicList, movieId);
 }
 
 class _MovieListScreenState extends State<MovieListScreen> {
-  _MovieListScreenState(this.apiName, this.movieId);
+  _MovieListScreenState(this.apiName, this.dynamicList, this.movieId);
 
   int movieId;
   String castCrewTitle;
   MovieModel model;
-  String apiName;
+  String apiName, dynamicList;
 
   @override
   void initState() {
@@ -55,7 +58,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
     return Scaffold(
         appBar: getAppBarWithBackBtn(
             ctx: context,
-            title: getTitle(apiName),
+            title: getTitle(dynamicList!=null?dynamicList:apiName),
             bgColor: Colors.white,
             icon: homeIcon),
         body: ScopedModel(model: model, child: apiresponse()));
@@ -84,18 +87,24 @@ class _MovieListScreenState extends State<MovieListScreen> {
 //      height: double.infinity,
         child: Container(
       alignment: Alignment.center,
-      child: StaggeredGridView.countBuilder(
-        crossAxisCount: 4,
-        itemCount: getCount(data),
-        //results.length,
-        itemBuilder: (BuildContext context, int index) => Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: getItemView(data, index),
-        ),
-        staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-      ),
+      child: data is MovieCatRespo
+          ? ListView.builder(
+              itemCount: getCount(data),
+              itemBuilder: (BuildContext context, int index) {
+                return getItemView(data, index);
+              })
+          : StaggeredGridView.countBuilder(
+              crossAxisCount: 4,
+              itemCount: getCount(data),
+              //results.length,
+              itemBuilder: (BuildContext context, int index) => Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: getItemView(data, index),
+              ),
+              staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+            ),
     ));
   }
 
@@ -112,19 +121,11 @@ class _MovieListScreenState extends State<MovieListScreen> {
     else if (apiName == StringConst.PERSON_MOVIE_CREW &&
         result is PersonMovieRespo)
       return result.crew.length;
+    else if (result is MovieCatRespo)
+      return result.genres.length;
     else
       return 1;
   }
-//  bool isShowViewAll(results) {
-//    if (results is NowPlayingRespo)
-//      return getCount(results) > 8 ? true : false;
-//    else if (apiName == StringConst.IMAGES && results is MovieImgRespo)
-//      return false;
-//    else if (results is MovieImgRespo)
-//      return false;
-//    else
-//      return true;
-//  }
 
   Widget getItemView(data, int index) {
     if (data is CreditsCrewRespo) return getPersonDetails(data, index);
@@ -151,8 +152,8 @@ class _MovieListScreenState extends State<MovieListScreen> {
           img: item.poster_path,
           name: item.original_title,
           vote: item.vote_average);
-    }
-    if (apiName == StringConst.PERSON_MOVIE_CAST && data is PersonMovieRespo) {
+    } else if (apiName == StringConst.PERSON_MOVIE_CAST &&
+        data is PersonMovieRespo) {
       PersonCast item = data.cast[index];
       return getMovieItemRow(
           context: context,
@@ -177,6 +178,24 @@ class _MovieListScreenState extends State<MovieListScreen> {
           img: item.posterPath,
           name: item.originalTitle,
           vote: item.voteAverage);
+    } else if (apiName == ApiConstant.GENRES_LIST && data is MovieCatRespo) {
+      Genres item = data.genres[index];
+      String tag = getTitle(apiName) + item.name + index.toString();
+      return getLargeItem(
+          context: context,
+          img: ApiConstant.DEMO_IMG,
+          //ApiConstant.IMAGE_POSTER + "item.filePath",
+          screenSpace: 10,
+          name: item.name,
+          tag: tag,
+          onTap: () {
+            navigationPush(
+                context,
+                MovieListScreen(
+                    apiName: StringConst.MOVIE_CATEGORY,
+                    dynamicList: item.name,
+                    movieId: item.id));
+          });
     } else
       Container(
         child: getTxt(msg: 'Data not found'),

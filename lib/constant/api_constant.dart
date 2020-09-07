@@ -24,15 +24,14 @@ class ApiConstant {
   static const MOVIE_VIDEOS = '/videos';
   static const RECOMMENDATIONS_MOVIE = '/recommendations';
   static const SIMILAR_MOVIES = '/similar';
-  static const KEYWORDS_MOVIE_LIST = 'keywords/';
+  static const KEYWORDS_MOVIE_LIST = 'keyword/';
   static const MOVIE_IMAGES = '/images';
 
   static var TRENDING_PERSONS = "trending/person/week";
   static var PERSONS_DETAILS = "person/";
   static var PERSONS_MOVIE_CREDITS = "/movie_credits";
   static var PERSONS_IMAGES = "/images";
-
-
+  static var KEYWORDS_API_MOVIES = "/movies";
 
   static var movieUrl = "movie";
   static var IMAGE_ORIG_POSTER = 'https://image.tmdb.org/t/p/original';

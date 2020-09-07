@@ -65,11 +65,15 @@ class _PersonDetailState extends State<PersonDetail> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: getTxt(msg: data.name),
+                title: GestureDetector(
+                    onTap: () {
+                      // model.fetchPersonMovie(personId);
+                    }, child: getTxt(msg: data.name)),
                 background: Hero(
                     tag: tag,
                     child: CachedNetworkImage(
-                      imageUrl: ApiConstant.IMAGE_ORIG_POSTER + imgPath==null?'':imgPath,
+                      imageUrl:
+                          ApiConstant.IMAGE_ORIG_POSTER + imgPath.toString(),
                       fit: BoxFit.fill,
                     )),
               )),
@@ -90,8 +94,10 @@ class _PersonDetailState extends State<PersonDetail> {
           personalInfo(data),
           SizedBox(height: 10),
           SifiMovieRow(StringConst.IMAGES),
-          TrandingMovieRow(apiName:StringConst.PERSON_MOVIE_CREW, movieId: personId),
-          TrandingMovieRow(apiName:StringConst.PERSON_MOVIE_CAST, movieId: personId)
+          TrandingMovieRow(
+              apiName: StringConst.PERSON_MOVIE_CREW, movieId: personId),
+          TrandingMovieRow(
+              apiName: StringConst.PERSON_MOVIE_CAST, movieId: personId)
         ],
       ),
     );
@@ -100,17 +106,11 @@ class _PersonDetailState extends State<PersonDetail> {
   Widget personalInfo(PersonDetailRespo data) {
     final size = MediaQuery.of(context).size;
     int yearold = 0;
-    if(data.deathday!=null || data.birthday!=null) {
+    if (data.deathday != null || data.birthday != null) {
       final _now = data.deathday != null
-          ? DateTime
-          .parse(data.deathday)
-          .year
-          : DateTime
-          .now()
-          .year;
-      yearold = _now - DateTime
-          .parse(data.birthday)
-          .year;
+          ? DateTime.parse(data.deathday).year
+          : DateTime.now().year;
+      yearold = _now - DateTime.parse(data.birthday).year;
     }
     return Container(
       padding: EdgeInsets.all(8),
@@ -126,7 +126,9 @@ class _PersonDetailState extends State<PersonDetail> {
               textAlign: TextAlign.start),
           SizedBox(height: 15),
           getTxtGreyColor(
-              msg: data.biography!=null?data.biography:'', fontSize: 15, fontWeight: FontWeight.w400),
+              msg: data.biography != null ? data.biography : '',
+              fontSize: 15,
+              fontWeight: FontWeight.w400),
           SizedBox(height: 15),
           getTxtBlackColor(
               msg: StringConst.PERSONAL_INFO,
@@ -135,7 +137,8 @@ class _PersonDetailState extends State<PersonDetail> {
               textAlign: TextAlign.start),
           SizedBox(height: 5),
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: Container(
               padding: EdgeInsets.all(10),
               width: size.width - 20,
@@ -145,10 +148,11 @@ class _PersonDetailState extends State<PersonDetail> {
                   getPIDetail('Gender', data?.gender == 2 ? 'Male' : 'Female'),
                   getPIDetail('Age', '$yearold years old'),
                   getPIDetail('Known For', data?.knownForDepartment ?? ''),
-                  getPIDetail('Date of Birth','${data.birthday ?? ''}'),
-                  getPIDetail('Birth Place','${data?.placeOfBirth ?? ''}'),
+                  getPIDetail('Date of Birth', '${data.birthday ?? ''}'),
+                  getPIDetail('Birth Place', '${data?.placeOfBirth ?? ''}'),
                   getPIDetail('Official Site', '${data?.homepage ?? '-'}'),
-                  getPIDetail('Also Known As', data?.alsoKnownAs?.join(' , ') ?? '-'),
+                  getPIDetail(
+                      'Also Known As', data?.alsoKnownAs?.join(' , ') ?? '-'),
                 ],
               ),
             ),
@@ -162,9 +166,15 @@ class _PersonDetailState extends State<PersonDetail> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getTxtGreyColor(msg: hint!=null?hint:'', fontSize: 13, textAlign: TextAlign.start),
+        getTxtGreyColor(
+            msg: hint != null ? hint : '',
+            fontSize: 13,
+            textAlign: TextAlign.start),
         SizedBox(height: 3),
-        getTxtBlackColor(msg: detail!=null?detail:'', fontSize: 16, textAlign: TextAlign.start),
+        getTxtBlackColor(
+            msg: detail != null ? detail : '',
+            fontSize: 16,
+            textAlign: TextAlign.start),
         SizedBox(height: 8),
         Divider(height: 2),
         SizedBox(height: 8),

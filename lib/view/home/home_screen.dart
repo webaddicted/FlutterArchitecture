@@ -114,7 +114,7 @@ String getTitle(String apiName) {
     case StringConst.PERSON_MOVIE_CREW:
       return 'Movie As Crew';
     case StringConst.PERSON_MOVIE_CAST:
-      return 'Movie As Crew';
+      return 'Movie As Cast';
     default:
       return apiName;
   }
@@ -148,7 +148,10 @@ callMovieApi(String apiName, MovieModel model, {int movieId}) {
     case StringConst.PERSON_MOVIE_CAST:
     case StringConst.PERSON_MOVIE_CREW:
       return model.fetchPersonMovie(movieId);
-
+    case StringConst.MOVIE_CATEGORY:
+      return model.fetchCategoryMovie(movieId);
+    case StringConst.MOVIES_KEYWORDS:
+      return model.fetchKeywordMovieList(movieId);
   }
 }
 
@@ -182,5 +185,9 @@ getData(String apiName, MovieModel model) {
     case StringConst.PERSON_MOVIE_CAST:
     case StringConst.PERSON_MOVIE_CREW:
       return model.personMovieRespo;
+    case StringConst.MOVIE_CATEGORY:
+      return model.catMovieRespo;
+    case StringConst.MOVIES_KEYWORDS:
+      return model.keywordMovieListRespo;
   }
 }

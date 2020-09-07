@@ -26,6 +26,8 @@ class StringConst {
   static var NO_DATA_FOUND = 'No Data Found';
 
   static const String IMAGES = 'Images';
+  static const String MOVIE_CATEGORY = 'Movie Category';
+  static const String MOVIES_KEYWORDS = 'Movies Keywords';
 
   static const String PERSON_MOVIE_CREW = 'Person Movie Crew';
   static const String PERSON_MOVIE_CAST = 'Person Movie Cast';

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/details/keyword_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
+import 'package:flutterarch/view/details/movie_list_screen.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -35,7 +37,7 @@ class MovieKeyword extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
-        getHeading(context: context, apiName: castCrew,isShowViewAll: false),
+        getHeading(context: context, apiName: castCrew, isShowViewAll: false),
         SizedBox(height: 8),
         getPersonItem(context, data)
       ],
@@ -47,22 +49,31 @@ class MovieKeyword extends StatelessWidget {
       child: Expanded(
         child: Wrap(
           direction: Axis.horizontal,
-          children: getKeywordListings(data.keywords),
+          children: getKeywordListings(context, data.keywords),
         ),
       ),
     );
   }
 
-  List<Widget> getKeywordListings(List<Keywords> keywords) {
+  List<Widget> getKeywordListings(
+      BuildContext context, List<Keywords> keywords) {
     List listings = List<Widget>();
     for (int i = 0; i < keywords.length; i++) {
       listings.add(
         Container(
           margin: EdgeInsets.only(left: 5, right: 5),
-          child: Chip(
-            elevation: 3.0,
-            backgroundColor: Colors.white,
-            label: Text(keywords[i].name),
+          child: InkWell(
+            onTap: () => navigationPush(
+                context,
+                MovieListScreen(
+                    apiName: StringConst.MOVIES_KEYWORDS,
+                    dynamicList: keywords[i].name,
+                    movieId: keywords[i].id)),
+            child: Chip(
+              elevation: 3.0,
+              backgroundColor: Colors.white,
+              label: Text(keywords[i].name),
+            ),
           ),
         ),
       );

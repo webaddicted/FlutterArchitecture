@@ -6,6 +6,7 @@ import 'package:flutterarch/data/home/now_playing_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
+import 'package:flutterarch/view/details/detail_movie.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class CarouselView extends StatelessWidget {
@@ -22,8 +23,8 @@ Widget apiresponse() {
       if (jsonResult.status == ApiStatus.COMPLETED)
         return CarouselSlider.builder(
           itemCount: jsonResult.data.results.length,
-          itemBuilder: (BuildContext context, int itemIndex) =>
-              getSliderItem(jsonResult.data.results[itemIndex]),
+          itemBuilder: (BuildContext context, int itemIndex) => getSliderItem(
+              context, itemIndex, jsonResult.data.results[itemIndex]),
           options: CarouselOptions(
             aspectRatio: 2.0,
 //          enlargeCenterPage: true,
@@ -37,7 +38,8 @@ Widget apiresponse() {
   );
 }
 
-Widget getSliderItem(Result item) {
+Widget getSliderItem(BuildContext context, int index, Result item) {
+  String tag = item.original_title + "Carosal" + index.toString();
   return Container(
     margin: EdgeInsets.all(5.0),
     child: ClipRRect(
@@ -46,7 +48,8 @@ Widget getSliderItem(Result item) {
           children: <Widget>[
             SizedBox(
                 width: double.infinity,
-                child: getCacheImage(ApiConstant.IMAGE_POSTER + item.poster_path)),
+                child:
+                    getCacheImage(ApiConstant.IMAGE_POSTER + item.poster_path)),
             Positioned(
               bottom: 0.0,
               left: 0.0,
@@ -77,9 +80,12 @@ Widget getSliderItem(Result item) {
                 child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      splashColor: Colors.redAccent,
-                      onTap: () => {},
-                    ))),
+                        splashColor: Colors.redAccent,
+                        onTap: () => navigationPush(
+                              context,
+                              DetailsMovieScreen(
+                                  item.original_title, index, item.id, tag),
+                            )))),
           ],
         )),
   );
