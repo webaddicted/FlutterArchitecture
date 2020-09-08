@@ -15,6 +15,7 @@ import 'package:flutterarch/utils/global_utility.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/person/person_detail.dart';
+import 'package:flutterarch/view/widget/carousel_view.dart';
 import 'package:flutterarch/view/widget/movie_cast_crew.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
@@ -59,7 +60,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
     return Scaffold(
         appBar: getAppBarWithBackBtn(
             ctx: context,
-            title: getTitle(dynamicList!=null?dynamicList:apiName),
+            title: getTitle(dynamicList != null ? dynamicList : apiName),
             bgColor: Colors.white,
             icon: homeIcon),
         body: ScopedModel(model: model, child: apiresponse()));
@@ -182,12 +183,24 @@ class _MovieListScreenState extends State<MovieListScreen> {
     } else if (apiName == ApiConstant.GENRES_LIST && data is MovieCatRespo) {
       Genres item = data.genres[index];
       String tag = getTitle(apiName) + item.name + index.toString();
-      return getLargeItem(
-          context: context,
-          img: getCategoryMovie()[index],
-          //ApiConstant.IMAGE_POSTER + "item.filePath",
-          screenSpace: 10,
+      // return getLargeItem(
+      //     context: context,
+      //     img: getCategoryMovie()[index],
+      //     //ApiConstant.IMAGE_POSTER + "item.filePath",
+      //     screenSpace: 10,
+      //     name: item.name,
+      //     tag: tag,
+      //     onTap: () {
+      //       navigationPush(
+      //           context,
+      //           MovieListScreen(
+      //               apiName: StringConst.MOVIE_CATEGORY,
+      //               dynamicList: item.name,
+      //               movieId: item.id));
+      //     });
+      return fullListImage(
           name: item.name,
+          image: getCategoryMovie()[index],
           tag: tag,
           onTap: () {
             navigationPush(

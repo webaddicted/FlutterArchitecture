@@ -20,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   MovieModel model;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -44,17 +45,19 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorConst.BLACK_COLOR,
         ),
         onPressed: () {
-          model.fetchNowPlaying();
-          model.fetchTrandingPerson();
-          callMovieApi(ApiConstant.POPULAR_MOVIES, model);
-          callMovieApi(ApiConstant.GENRES_LIST, model);
-          callMovieApi(ApiConstant.TRENDING_MOVIE_LIST, model);
-          callMovieApi(ApiConstant.DISCOVER_MOVIE, model);
-          callMovieApi(ApiConstant.UPCOMING_MOVIE, model);
-          model.fetchTrandingPerson();
-          callMovieApi(ApiConstant.TOP_RATED, model);
+          _scaffoldKey.currentState.openDrawer();
+          // model.fetchNowPlaying();
+          // model.fetchTrandingPerson();
+          // callMovieApi(ApiConstant.POPULAR_MOVIES, model);
+          // callMovieApi(ApiConstant.GENRES_LIST, model);
+          // callMovieApi(ApiConstant.TRENDING_MOVIE_LIST, model);
+          // callMovieApi(ApiConstant.DISCOVER_MOVIE, model);
+          // callMovieApi(ApiConstant.UPCOMING_MOVIE, model);
+          // model.fetchTrandingPerson();
+          // callMovieApi(ApiConstant.TOP_RATED, model);
         });
     return Scaffold(
+        key: _scaffoldKey,
         appBar: getAppBarWithBackBtn(
             ctx: context,
             title: StringConst.HOME_TITLE,

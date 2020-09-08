@@ -3,22 +3,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterarch/constant/assets_const.dart';
 import 'package:flutterarch/constant/color_const.dart';
+import 'package:flutterarch/utils/SlideRoute.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 
 //  {START PAGE NAVIGATION}
+// void navigationPush(BuildContext context, StatefulWidget route) {
+//   Navigator.push(context, MaterialPageRoute(
+//     builder: (context) {
+//       return route;
+//     },
+//   ));
+// }
+
 void navigationPush(BuildContext context, StatefulWidget route) {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (context) {
-      return route;
-    },
-  ));
+  Navigator.push(context, RouteTransition(widget: route));
 }
 
 void navigationPop(BuildContext context, StatefulWidget route) {
-  Navigator.pop(context, MaterialPageRoute(builder: (context) {
-    return route;
-  }));
+  Navigator.pop(context, RouteTransition(widget: route));
 }
+
+// void navigationPop(BuildContext context, StatefulWidget route) {
+//   Navigator.pop(context, MaterialPageRoute(builder: (context) {
+//     return route;
+//   }));
+// }
 
 void navigationStateLessPush(BuildContext context, StatelessWidget route) {
   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -40,10 +49,7 @@ void delay(BuildContext context, int duration, StatefulWidget route) {
 
 //  {END PAGE NAVIGATION}
 
-
-
-Widget apiHandler<T>(
-    {ApiResponse<T> response, Widget loading , Widget error}) {
+Widget apiHandler<T>({ApiResponse<T> response, Widget loading, Widget error}) {
   switch (response.status) {
     case ApiStatus.LOADING:
       debugPrint("LOADING");
@@ -130,9 +136,9 @@ class Loading extends StatelessWidget {
 
 AppBar getAppBarWithBackBtn(
     {@required BuildContext ctx,
-      String title,
-      Color bgColor,
-      double fontSize,
+    String title,
+    Color bgColor,
+    double fontSize,
     Widget icon}) {
   return AppBar(
     backgroundColor: bgColor == null ? ColorConst.APP_COLOR : bgColor,
@@ -141,13 +147,19 @@ AppBar getAppBarWithBackBtn(
     title: new Text(
       title,
       style: new TextStyle(
-          fontWeight: FontWeight.bold,color: Colors.black, fontSize: fontSize!=null ? fontSize : 16),
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          fontSize: fontSize != null ? fontSize : 16),
     ),
   );
 }
 
 //  {START TEXT VIEW}
-Text getTxt({@required String msg, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
+Text getTxt(
+    {@required String msg,
+    FontWeight fontWeight,
+    int maxLines,
+    TextAlign textAlign}) {
   return Text(msg,
       maxLines: maxLines,
       textAlign: textAlign,
@@ -157,7 +169,11 @@ Text getTxt({@required String msg, FontWeight fontWeight, int maxLines, TextAlig
 }
 
 Text getTxtAppColor(
-    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
+    {@required String msg,
+    double fontSize,
+    FontWeight fontWeight,
+    int maxLines,
+    TextAlign textAlign}) {
   return Text(
     msg,
     maxLines: maxLines,
@@ -170,20 +186,26 @@ Text getTxtAppColor(
 }
 
 Text getTxtWhiteColor(
-    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
+    {@required String msg,
+    double fontSize,
+    FontWeight fontWeight,
+    int maxLines,
+    TextAlign textAlign}) {
   return Text(
     msg,
     maxLines: maxLines,
     textAlign: textAlign,
     style: _getFontStyle(
-        txtColor: Colors.white,
-        fontSize: fontSize,
-        fontWeight: fontWeight),
+        txtColor: Colors.white, fontSize: fontSize, fontWeight: fontWeight),
   );
 }
 
 Text getTxtBlackColor(
-    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
+    {@required String msg,
+    double fontSize,
+    FontWeight fontWeight,
+    int maxLines,
+    TextAlign textAlign}) {
   return Text(
     msg,
     textAlign: textAlign,
@@ -194,7 +216,11 @@ Text getTxtBlackColor(
 }
 
 Text getTxtGreyColor(
-    {@required String msg, double fontSize, FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
+    {@required String msg,
+    double fontSize,
+    FontWeight fontWeight,
+    int maxLines,
+    TextAlign textAlign}) {
   return Text(
     msg,
     textAlign: textAlign,
@@ -208,9 +234,11 @@ Text getTxtGreyColor(
 
 Text getTxtColor(
     {@required String msg,
-      @required Color txtColor,
-      double fontSize,
-      FontWeight fontWeight, int maxLines, TextAlign textAlign}) {
+    @required Color txtColor,
+    double fontSize,
+    FontWeight fontWeight,
+    int maxLines,
+    TextAlign textAlign}) {
   return Text(
     msg,
     textAlign: textAlign,
@@ -222,13 +250,13 @@ Text getTxtColor(
 
 TextStyle _getFontStyle(
     {Color txtColor,
-      double fontSize,
-      FontWeight fontWeight,
-      String fontFamily,
-      TextDecoration txtDecoration}) {
+    double fontSize,
+    FontWeight fontWeight,
+    String fontFamily,
+    TextDecoration txtDecoration}) {
   return TextStyle(
       color: txtColor,
-      fontSize: fontSize!=null ? fontSize : 14,
+      fontSize: fontSize != null ? fontSize : 14,
       decoration: txtDecoration == null ? TextDecoration.none : txtDecoration,
       fontFamily: fontFamily == null ? AssetsConst.ZILLASLAB_FONT : fontFamily,
       fontWeight: fontWeight == null ? FontWeight.normal : fontWeight);
@@ -247,12 +275,14 @@ ClipRRect loadLocalCircleImg(String imagePath, double radius) {
         image: 'imgUrl'),
   );
 }
+
 FadeInImage loadImg(String url, int placeHolderPos) {
   return new FadeInImage.assetNetwork(
       fit: BoxFit.fill,
       placeholder: _getPlaceHolder(placeHolderPos),
       image: url);
 }
+
 ClipRRect loadCircleImg(String imgUrl, int placeHolderPos, double radius) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(radius),
@@ -274,12 +304,11 @@ String _getPlaceHolder(int placeHolderPos) {
   }
 }
 
-Widget getCacheImage(String url){
+Widget getCacheImage(String url) {
   return CachedNetworkImage(
     fit: BoxFit.cover,
     imageUrl: url,
-    placeholder: (context, url) =>
-    const CircularProgressIndicator(),
+    placeholder: (context, url) => const CircularProgressIndicator(),
     errorWidget: (context, url, error) => const Icon(Icons.error),
   );
 }
@@ -290,6 +319,3 @@ Divider getDivider() {
     height: 1,
   );
 }
-
-
-

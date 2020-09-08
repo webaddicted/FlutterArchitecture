@@ -14,42 +14,55 @@ class CarouselView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(child: apiresponse());
   }
-}
 
-Widget apiresponse() {
-  return ScopedModelDescendant<MovieModel>(
-    builder: (context, _, model) {
-      var jsonResult = model.nowPlayingRespo;
-      if (jsonResult.status == ApiStatus.COMPLETED)
-        return CarouselSlider.builder(
-          itemCount: jsonResult.data.results.length,
-          itemBuilder: (BuildContext context, int itemIndex) => getSliderItem(
-              context, itemIndex, jsonResult.data.results[itemIndex]),
-          options: CarouselOptions(
-            aspectRatio: 2.0,
+  Widget apiresponse() {
+    return ScopedModelDescendant<MovieModel>(
+      builder: (context, _, model) {
+        var jsonResult = model.nowPlayingRespo;
+        if (jsonResult.status == ApiStatus.COMPLETED)
+          return CarouselSlider.builder(
+            itemCount: jsonResult.data.results.length,
+            itemBuilder: (BuildContext context, int itemIndex) => getSliderItem(
+                context, itemIndex, jsonResult.data.results[itemIndex]),
+            options: CarouselOptions(
+              aspectRatio: 2.0,
 //          enlargeCenterPage: true,
-            scrollDirection: Axis.horizontal,
-            autoPlay: true,
-          ),
-        );
-      else
-        return apiHandler(response: jsonResult);
-    },
-  );
+              scrollDirection: Axis.horizontal,
+              autoPlay: true,
+            ),
+          );
+        else
+          return apiHandler(response: jsonResult);
+      },
+    );
+  }
+
+  Widget getSliderItem(BuildContext context, int itemIndex, Result result) {
+    String tag = result.original_title + "Carosal" + itemIndex.toString();
+    return fullListImage(
+        name: result.original_title,
+        image: ApiConstant.IMAGE_POSTER + result.poster_path,
+        tag: tag,
+        onTap: () {
+          navigationPush(
+            context,
+            DetailsMovieScreen(
+                result.original_title, itemIndex, result.id, tag),
+          );
+        });
+  }
 }
 
-Widget getSliderItem(BuildContext context, int index, Result item) {
-  String tag = item.original_title + "Carosal" + index.toString();
+Widget fullListImage({String name, String image, String tag, Function onTap}) {
   return Container(
     margin: EdgeInsets.all(5.0),
     child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         child: Stack(
           children: <Widget>[
-            SizedBox(
-                width: double.infinity,
-                child:
-                    getCacheImage(ApiConstant.IMAGE_POSTER + item.poster_path)),
+            Hero(
+                tag: tag,
+                child: SizedBox(width: double.infinity, child: getCacheImage(image))),
             Positioned(
               bottom: 0.0,
               left: 0.0,
@@ -67,7 +80,7 @@ Widget getSliderItem(BuildContext context, int index, Result item) {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 child: Text(
-                  item.original_title,
+                  name,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
@@ -80,12 +93,7 @@ Widget getSliderItem(BuildContext context, int index, Result item) {
                 child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                        splashColor: Colors.redAccent,
-                        onTap: () => navigationPush(
-                              context,
-                              DetailsMovieScreen(
-                                  item.original_title, index, item.id, tag),
-                            )))),
+                        splashColor: Colors.redAccent, onTap: () => onTap()))),
           ],
         )),
   );
