@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutterarch/view/main.dart';
+import 'file:///D:/AndroidStudioProjects/testing/Flutter-architecture/lib/main.dart';
 
 //import 'package:flutterarch/view/main.dart';
 
