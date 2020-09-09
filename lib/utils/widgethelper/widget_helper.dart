@@ -151,7 +151,7 @@ AppBar getAppBarWithBackBtn(
         title,
         style: new TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: ColorConst.BLACK_COLOR,
             fontSize: fontSize != null ? fontSize : 16),
       ),
     ),
@@ -200,7 +200,7 @@ Text getTxtWhiteColor(
     maxLines: maxLines,
     textAlign: textAlign,
     style: _getFontStyle(
-        txtColor: Colors.white, fontSize: fontSize, fontWeight: fontWeight),
+        txtColor: ColorConst.WHITE_COLOR, fontSize: fontSize, fontWeight: fontWeight),
   );
 }
 
@@ -215,7 +215,7 @@ Text getTxtBlackColor(
     textAlign: textAlign,
     maxLines: maxLines,
     style: _getFontStyle(
-        txtColor: Colors.black, fontSize: fontSize, fontWeight: fontWeight),
+        txtColor: ColorConst.BLACK_COLOR, fontSize: fontSize, fontWeight: fontWeight),
   );
 }
 
@@ -312,7 +312,11 @@ Widget getCacheImage(String url) {
   return CachedNetworkImage(
     fit: BoxFit.cover,
     imageUrl: url,
-    placeholder: (context, url) => const CircularProgressIndicator(),
+    placeholder: (context, url) => Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.grey[400],
+    ),
     errorWidget: (context, url, error) => const Icon(Icons.error),
   );
 }

@@ -197,21 +197,6 @@ class _MovieListScreenState extends State<MovieListScreen> {
     } else if (apiName == ApiConstant.GENRES_LIST && data is MovieCatRespo) {
       Genres item = data.genres[index];
       String tag = getTitle(apiName) + item.name + index.toString();
-      // return getLargeItem(
-      //     context: context,
-      //     img: getCategoryMovie()[index],
-      //     //ApiConstant.IMAGE_POSTER + "item.filePath",
-      //     screenSpace: 10,
-      //     name: item.name,
-      //     tag: tag,
-      //     onTap: () {
-      //       navigationPush(
-      //           context,
-      //           MovieListScreen(
-      //               apiName: StringConst.MOVIE_CATEGORY,
-      //               dynamicList: item.name,
-      //               movieId: item.id));
-      //     });
       return fullListImage(
           name: item.name,
           image: getCategoryMovie()[index],

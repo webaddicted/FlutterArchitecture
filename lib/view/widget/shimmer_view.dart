@@ -30,16 +30,16 @@ class ShimmerView extends StatelessWidget {
   }
 
   void getApiNameData(BuildContext context) {
-    switch (apiName) {
-      case ApiConstant.GENRES_LIST:
-        viewType = VIEW_CATEGORY;
-        break;
-      case StringConst.MOVIE_CAST:
-        viewType = VIEW_CATEGORY;
-        break;
-    }
+    // switch (apiName) {
+    //   case ApiConstant.GENRES_LIST:
+    //     viewType = VIEW_CATEGORY;
+    //     break;
+    //   case StringConst.MOVIE_CAST:
+    //     viewType = VIEW_CATEGORY;
+    //     break;
+    // }
     if (apiName == ApiConstant.GENRES_LIST) {
-      parentHeight = 180;
+      parentHeight = 380;
       viewType = VIEW_CATEGORY;
     } else if (apiName == StringConst.MOVIE_CAST ||
         apiName == StringConst.MOVIE_CREW ||

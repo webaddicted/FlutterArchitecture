@@ -87,7 +87,7 @@ class MovieCastCrew extends StatelessWidget {
                   PersonDetail(
                       id: id,
                       name: name,
-                      imgPath: ApiConstant.IMAGE_POSTER + image,
+                      imgPath: ApiConstant.IMAGE_POSTER + image.toString(),
                       tag: tag)));
         },
       ),

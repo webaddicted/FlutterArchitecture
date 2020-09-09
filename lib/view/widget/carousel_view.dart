@@ -67,6 +67,7 @@ Widget fullListImage({String name, String image, String tag, Function onTap}) {
             Hero(
                 tag: tag,
                 child: SizedBox(
+                  height: 180,
                     width: double.infinity, child: getCacheImage(image))),
             Positioned(
               bottom: 0.0,
@@ -85,7 +86,7 @@ Widget fullListImage({String name, String image, String tag, Function onTap}) {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 child: Text(
-                  name,
+                  name==null?"":name,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
