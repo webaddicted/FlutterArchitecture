@@ -1,33 +1,38 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterarch/constant/api_constant.dart';
+import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/person/person_detail_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PersonDetail extends StatefulWidget {
   final id;
   final imgPath;
   final tag;
+  final name;
 
-  PersonDetail({@required this.id, this.imgPath, this.tag});
+  PersonDetail({@required this.id, this.name, this.imgPath, this.tag});
 
   @override
-  _PersonDetailState createState() => _PersonDetailState(id, imgPath, tag);
+  _PersonDetailState createState() =>
+      _PersonDetailState(id, name, imgPath, tag);
 }
 
 class _PersonDetailState extends State<PersonDetail> {
   final personId;
   final imgPath;
   final tag;
+  final name;
   MovieModel model;
 
-  _PersonDetailState(this.personId, this.imgPath, this.tag);
+  _PersonDetailState(this.personId, this.name, this.imgPath, this.tag);
 
   @override
   void initState() {
@@ -49,18 +54,19 @@ class _PersonDetailState extends State<PersonDetail> {
       builder: (context, _, model) {
         var jsonResult = model.personDetailRespo;
         if (jsonResult.status == ApiStatus.COMPLETED) {
-          return _createUi(jsonResult.data);
+          return _createUi(data: jsonResult.data);
         } else
-          return apiHandler(response: jsonResult);
+          return apiHandler(loading: _createUi(), response: jsonResult);
       },
     );
   }
 
-  Widget _createUi(PersonDetailRespo data) {
+  Widget _createUi({PersonDetailRespo data}) {
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+              backgroundColor: ColorConst.APP_COLOR,
               expandedHeight: 330.0,
               floating: false,
               pinned: true,
@@ -68,12 +74,12 @@ class _PersonDetailState extends State<PersonDetail> {
                 title: GestureDetector(
                     onTap: () {
                       // model.fetchPersonMovie(personId);
-                    }, child: getTxt(msg: data.name)),
+                    },
+                    child: getTxt(msg: name)),
                 background: Hero(
                     tag: tag,
                     child: CachedNetworkImage(
-                      imageUrl:
-                          ApiConstant.IMAGE_ORIG_POSTER + imgPath.toString(),
+                      imageUrl: imgPath.toString(),
                       fit: BoxFit.fill,
                     )),
               )),
@@ -106,7 +112,7 @@ class _PersonDetailState extends State<PersonDetail> {
   Widget personalInfo(PersonDetailRespo data) {
     final size = MediaQuery.of(context).size;
     int yearold = 0;
-    if (data.deathday != null || data.birthday != null) {
+    if (data != null && (data.deathday != null || data.birthday != null)) {
       final _now = data.deathday != null
           ? DateTime.parse(data.deathday).year
           : DateTime.now().year;
@@ -125,10 +131,13 @@ class _PersonDetailState extends State<PersonDetail> {
               fontWeight: FontWeight.w700,
               textAlign: TextAlign.start),
           SizedBox(height: 15),
-          getTxtGreyColor(
-              msg: data.biography != null ? data.biography : '',
-              fontSize: 15,
-              fontWeight: FontWeight.w400),
+          if (data != null)
+            getTxtGreyColor(
+                msg: data.biography != null ? data.biography : '',
+                fontSize: 15,
+                fontWeight: FontWeight.w400)
+          else
+            ShimmerView.getOverView(context),
           SizedBox(height: 15),
           getTxtBlackColor(
               msg: StringConst.PERSONAL_INFO,
@@ -145,14 +154,19 @@ class _PersonDetailState extends State<PersonDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  getPIDetail('Gender', data?.gender == 2 ? 'Male' : 'Female'),
+                  getPIDetail('Gender',
+                      data != null && data?.gender == 2 ? 'Male' : 'Female'),
                   getPIDetail('Age', '$yearold years old'),
-                  getPIDetail('Known For', data?.knownForDepartment ?? ''),
-                  getPIDetail('Date of Birth', '${data.birthday ?? ''}'),
-                  getPIDetail('Birth Place', '${data?.placeOfBirth ?? ''}'),
-                  getPIDetail('Official Site', '${data?.homepage ?? '-'}'),
+                  getPIDetail('Known For',
+                      data != null ? data?.knownForDepartment : null),
                   getPIDetail(
-                      'Also Known As', data?.alsoKnownAs?.join(' , ') ?? '-'),
+                      'Date of Birth', data != null ? data.birthday : null),
+                  getPIDetail(
+                      'Birth Place', data != null ? data.placeOfBirth : null),
+                  getPIDetail(
+                      'Official Site', data != null ? data.homepage : null),
+                  getPIDetail('Also Known As',
+                      data != null ? data?.alsoKnownAs?.join(' , ') : null),
                 ],
               ),
             ),
@@ -162,7 +176,7 @@ class _PersonDetailState extends State<PersonDetail> {
     );
   }
 
-  getPIDetail(String hint, String detail) {
+  Widget getPIDetail(String hint, String detail) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -171,10 +185,21 @@ class _PersonDetailState extends State<PersonDetail> {
             fontSize: 13,
             textAlign: TextAlign.start),
         SizedBox(height: 3),
-        getTxtBlackColor(
-            msg: detail != null ? detail : '',
-            fontSize: 16,
-            textAlign: TextAlign.start),
+        if (detail == null)
+          Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              enabled: true,
+              child: Container(
+                width: 150,
+                height: 10,
+                color: Colors.white,
+              ))
+        else
+          getTxtBlackColor(
+              msg: detail != null ? detail : '-',
+              fontSize: 16,
+              textAlign: TextAlign.start),
         SizedBox(height: 8),
         Divider(height: 2),
         SizedBox(height: 8),

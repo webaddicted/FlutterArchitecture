@@ -7,6 +7,7 @@ import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/detail_movie.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class CarouselView extends StatelessWidget {
@@ -32,21 +33,24 @@ class CarouselView extends StatelessWidget {
             ),
           );
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(
+              loading: ShimmerView(viewType: ShimmerView.VIEW_CASOSAL),
+              response: jsonResult);
       },
     );
   }
 
   Widget getSliderItem(BuildContext context, int itemIndex, Result result) {
     String tag = result.original_title + "Carosal" + itemIndex.toString();
+    String img = ApiConstant.IMAGE_POSTER + result.poster_path;
     return fullListImage(
         name: result.original_title,
-        image: ApiConstant.IMAGE_POSTER + result.poster_path,
+        image: img,
         tag: tag,
         onTap: () {
           navigationPush(
             context,
-            DetailsMovieScreen(
+            DetailsMovieScreen(result.original_title, img,
                 result.original_title, itemIndex, result.id, tag),
           );
         });
@@ -62,7 +66,8 @@ Widget fullListImage({String name, String image, String tag, Function onTap}) {
           children: <Widget>[
             Hero(
                 tag: tag,
-                child: SizedBox(width: double.infinity, child: getCacheImage(image))),
+                child: SizedBox(
+                    width: double.infinity, child: getCacheImage(image))),
             Positioned(
               bottom: 0.0,
               left: 0.0,

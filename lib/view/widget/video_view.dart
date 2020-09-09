@@ -6,6 +6,7 @@ import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:flutterarch/view/widget/video_player.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -30,7 +31,7 @@ class VideoView extends StatelessWidget {
               ? getTradingList(context, jsonResult.data.results)
               : Container();
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(loading: ShimmerView(viewType: ShimmerView.VIEW_CASOSAL),response: jsonResult);
       },
     );
   }

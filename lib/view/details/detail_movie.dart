@@ -6,26 +6,30 @@ import 'package:flutterarch/data/details/movie_details_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
-import 'package:flutterarch/view/widget/genre_movie.dart';
+import 'package:flutterarch/view/widget/movie_tag.dart';
 import 'package:flutterarch/view/widget/movie_cast_crew.dart';
 import 'package:flutterarch/view/widget/movie_keyword.dart';
 import 'package:flutterarch/view/widget/rating_result.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:flutterarch/view/widget/video_view.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DetailsMovieScreen extends StatefulWidget {
   final apiName;
   final tag;
   final index;
   final movieId;
+  final image, movieName;
 
-  DetailsMovieScreen(this.apiName, this.index, this.movieId, this.tag);
+  DetailsMovieScreen(this.movieName, this.image, this.apiName, this.index,
+      this.movieId, this.tag);
 
   @override
   _DetailsMovieScreenState createState() =>
-      _DetailsMovieScreenState(apiName, index, movieId, tag);
+      _DetailsMovieScreenState(movieName, image, apiName, index, movieId, tag);
 }
 
 class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
@@ -35,8 +39,10 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
   final movieId;
   MovieModel model;
   final double expandedHeight = 350.0;
+  final image, movieName;
 
-  _DetailsMovieScreenState(this.apiName, this.index, this.movieId, this.tag);
+  _DetailsMovieScreenState(this.movieName, this.image, this.apiName, this.index,
+      this.movieId, this.tag);
 
   @override
   void initState() {
@@ -62,14 +68,14 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
       builder: (context, _, model) {
         var jsonResult = model.getMovieDetails;
         if (jsonResult.status == ApiStatus.COMPLETED)
-          return _createUi(jsonResult.data);
+          return _createUi(data: jsonResult.data);
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(loading: _createUi(), response: jsonResult);
       },
     );
   }
 
-  Widget _createUi(MovieDetailsRespo data) {
+  Widget _createUi({MovieDetailsRespo data}) {
 //    print(' obj   :  ' + data.releaseDate);
     final size = MediaQuery.of(context).size;
     return Stack(
@@ -91,15 +97,15 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
   }
 
   Widget _helperImage(MovieDetailsRespo data) {
+    print("==========================Image===============" + image);
     return Container(
       height: expandedHeight + 50,
       width: double.infinity,
       child: Hero(
           tag: tag,
-          child: Container(
-            child:
-                getCacheImage(ApiConstant.IMAGE_ORIG_POSTER + data.posterPath.toString()),
-          )),
+          child: Container(child: getCacheImage(image)
+              // ApiConstant.IMAGE_ORIG_POSTER + data.posterPath.toString()),
+              )),
     );
   }
 
@@ -109,7 +115,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
         child: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onPressed: () {
 //            model.movieDetails(movieId);
@@ -160,11 +166,12 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
           SifiMovieRow(ApiConstant.MOVIE_IMAGES),
           MovieCastCrew(castCrew: StringConst.MOVIE_CAST, movieId: movieId),
           MovieCastCrew(castCrew: StringConst.MOVIE_CREW, movieId: movieId),
-          // getHeading(context: context, apiName: 'Keyword'),
           VideoView('Trailer'),
           MovieKeyword('Keyword'),
-          TrandingMovieRow(apiName:ApiConstant.RECOMMENDATIONS_MOVIE, movieId:movieId),
-          TrandingMovieRow(apiName:ApiConstant.SIMILAR_MOVIES, movieId:movieId),
+          TrandingMovieRow(
+              apiName: ApiConstant.RECOMMENDATIONS_MOVIE, movieId: movieId),
+          TrandingMovieRow(
+              apiName: ApiConstant.SIMILAR_MOVIES, movieId: movieId),
         ],
       ),
     );
@@ -187,24 +194,26 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
             children: <Widget>[
               Expanded(
                 child: getTxtBlackColor(
-                    msg: movie.originalTitle!=null?movie.originalTitle:'',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                    msg: movieName, fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              RatingResult(movie.voteAverage, 12.0)
+              RatingResult(movie == null ? 0 : movie.voteAverage, 12.0)
             ],
           ),
           SizedBox(height: 7),
-          if(movie.genres!=null && movie.genres.length>0)
-          GenreMovie(items: movie.genres),
+          MovieTag(items: movie == null ? null : movie.genres),
           SizedBox(height: 10),
           _contentAbout(movie),
           SizedBox(height: 10),
           getTxtBlackColor(
               msg: 'Overview', fontSize: 18, fontWeight: FontWeight.bold),
           SizedBox(height: 7),
-          getTxtGreyColor(
-              msg: movie.overview!=null?movie.overview:'', fontSize: 15, fontWeight: FontWeight.w400),
+          if (movie != null)
+            getTxtGreyColor(
+                msg: movie.overview != null ? movie.overview : '',
+                fontSize: 15,
+                fontWeight: FontWeight.w400)
+          else
+            ShimmerView.getOverView(context)
         ],
       ),
     );
@@ -221,24 +230,28 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              if (_dataMovie.status != null)
-                _contentDescriptionAbout('Status', _dataMovie.status!=null?_dataMovie.status:''),
-              if (_dataMovie.runtime != null)
-                _contentDescriptionAbout(
-                    'Duration', '${_dataMovie.runtime} min'),
-              if (_dataMovie.releaseDate != null)
-              _contentDescriptionAbout('Release Date', _dataMovie.releaseDate!=null?_dataMovie.releaseDate:''),
-              if (_dataMovie.budget != null)
-                _contentDescriptionAbout('Budget', '\$${_dataMovie.budget!=null?_dataMovie.budget:''}'),
-              if (_dataMovie.revenue != null)
-                _contentDescriptionAbout('Revenue', '\$${_dataMovie.revenue!=null?_dataMovie.revenue:''}'),
+              _contentDescriptionAbout(
+                  'Status', _dataMovie != null ? _dataMovie.status : null),
+              _contentDescriptionAbout('Duration',
+                  '${_dataMovie != null ? _dataMovie.runtime : null} min'),
+              _contentDescriptionAbout('Release Date',
+                  _dataMovie != null ? _dataMovie.releaseDate : null),
+              _contentDescriptionAbout('Budget',
+                  '\$${_dataMovie != null ? _dataMovie.budget : null}'),
+              _contentDescriptionAbout('Revenue',
+                  '\$${_dataMovie != null ? _dataMovie.revenue : null}'),
             ],
           ),
-          Container(
-              width: 80,
-              height: 125,
-              child: getCacheImage(ApiConstant.IMAGE_POSTER + _dataMovie.backdropPath.toString())
-              ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Container(
+                width: 80,
+                height: 125,
+                child: getCacheImage(_dataMovie == null
+                    ? image
+                    : ApiConstant.IMAGE_POSTER +
+                        _dataMovie.backdropPath.toString())),
+          ),
         ],
       ),
     );
@@ -250,16 +263,27 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
         Row(
           children: <Widget>[
             getTxtBlackColor(
-                msg: title!=null?title:'',
+                msg: title != null ? title : '',
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start),
             Text(' : '),
-            getTxtAppColor(
-                msg: value!=null?value:'',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                textAlign: TextAlign.start),
+            if (value == null)
+              Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  enabled: true,
+                  child: Container(
+                    width: 150,
+                    height: 10,
+                    color: Colors.white,
+                  ))
+            else
+              getTxtAppColor(
+                  msg: value != null ? value : '',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  textAlign: TextAlign.start),
           ],
         ),
         SizedBox(

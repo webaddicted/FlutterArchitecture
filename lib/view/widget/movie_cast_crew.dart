@@ -8,6 +8,7 @@ import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/person/person_detail.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -30,7 +31,14 @@ class MovieCastCrew extends StatelessWidget {
         if (jsonResult.status == ApiStatus.COMPLETED)
           return trandingPerson(context, jsonResult.data);
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(
+              loading: ShimmerView(
+                viewType: ShimmerView.VIEW_HORI_PERSON,
+                parentHeight: 150,
+                height: 100,
+                width: 110,
+              ),
+              response: jsonResult);
       },
     );
   }
@@ -74,7 +82,13 @@ class MovieCastCrew extends StatelessWidget {
               name: name,
               image: image,
               job: chatactor,
-              onTap: (int id) =>navigationPush(context, PersonDetail(id: id, imgPath: image, tag: tag)));
+              onTap: (int id) => navigationPush(
+                  context,
+                  PersonDetail(
+                      id: id,
+                      name: name,
+                      imgPath: ApiConstant.IMAGE_POSTER + image,
+                      tag: tag)));
         },
       ),
     );

@@ -6,6 +6,7 @@ import 'package:flutterarch/model/movie_model.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/movie_list_screen.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -28,7 +29,7 @@ class MovieKeyword extends StatelessWidget {
               ? trandingPerson(context, jsonResult.data)
               : Container();
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(loading: ShimmerView.movieDetailsTag(),response: jsonResult);
       },
     );
   }

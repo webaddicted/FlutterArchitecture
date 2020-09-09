@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterarch/utils/global_utility.dart';
 
 class ColorConst {
-  static Color APP_COLOR = Colors.blue;
+  static Color APP_COLOR = colorFromHex("#2ECC71");
   static Color GREY_COLOR = Colors.grey;
   static Color RED_COLOR = Colors.red;
   static Color GREEN_COLOR = Colors.green;

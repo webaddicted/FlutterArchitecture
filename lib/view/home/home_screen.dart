@@ -8,6 +8,7 @@ import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/widget/carousel_view.dart';
 import 'package:flutterarch/view/widget/movie_cate.dart';
 import 'package:flutterarch/view/widget/navig_drawer.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_person.dart';
@@ -45,16 +46,16 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorConst.BLACK_COLOR,
         ),
         onPressed: () {
-          _scaffoldKey.currentState.openDrawer();
-          // model.fetchNowPlaying();
-          // model.fetchTrandingPerson();
-          // callMovieApi(ApiConstant.POPULAR_MOVIES, model);
-          // callMovieApi(ApiConstant.GENRES_LIST, model);
-          // callMovieApi(ApiConstant.TRENDING_MOVIE_LIST, model);
-          // callMovieApi(ApiConstant.DISCOVER_MOVIE, model);
-          // callMovieApi(ApiConstant.UPCOMING_MOVIE, model);
-          // model.fetchTrandingPerson();
-          // callMovieApi(ApiConstant.TOP_RATED, model);
+          // _scaffoldKey.currentState.openDrawer();
+          model.fetchNowPlaying();
+          model.fetchTrandingPerson();
+          callMovieApi(ApiConstant.POPULAR_MOVIES, model);
+          callMovieApi(ApiConstant.GENRES_LIST, model);
+          callMovieApi(ApiConstant.TRENDING_MOVIE_LIST, model);
+          callMovieApi(ApiConstant.DISCOVER_MOVIE, model);
+          callMovieApi(ApiConstant.UPCOMING_MOVIE, model);
+          model.fetchTrandingPerson();
+          callMovieApi(ApiConstant.TOP_RATED, model);
         });
     return Scaffold(
         key: _scaffoldKey,
@@ -77,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 10),
+              // SizedBox(height:450,child: ShimmerView.movieDetailsTag()),
               CarouselView(),
               TrandingMovieRow(apiName: ApiConstant.TRENDING_MOVIE_LIST),
               MovieCate(),

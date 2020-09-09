@@ -17,26 +17,29 @@ import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/person/person_detail.dart';
 import 'package:flutterarch/view/widget/carousel_view.dart';
 import 'package:flutterarch/view/widget/movie_cast_crew.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/sifi_movie_row.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class MovieListScreen extends StatefulWidget {
-  String apiName, dynamicList;
+  String apiName, dynamicList, titleTag;
   int movieId;
 
-  MovieListScreen({this.apiName, this.dynamicList, this.movieId});
+  MovieListScreen(
+      {this.apiName, this.dynamicList, this.movieId, this.titleTag});
 
   @override
   _MovieListScreenState createState() =>
-      _MovieListScreenState(apiName, dynamicList, movieId);
+      _MovieListScreenState(apiName, dynamicList, movieId, titleTag);
 }
 
 class _MovieListScreenState extends State<MovieListScreen> {
-  _MovieListScreenState(this.apiName, this.dynamicList, this.movieId);
+  _MovieListScreenState(
+      this.apiName, this.dynamicList, this.movieId, this.titleTag);
 
   int movieId;
-  String castCrewTitle;
+  String castCrewTitle, titleTag;
   MovieModel model;
   String apiName, dynamicList;
 
@@ -62,6 +65,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
             ctx: context,
             title: getTitle(dynamicList != null ? dynamicList : apiName),
             bgColor: Colors.white,
+            titleTag: titleTag,
             icon: homeIcon),
         body: ScopedModel(model: model, child: apiresponse()));
   }
@@ -75,7 +79,12 @@ class _MovieListScreenState extends State<MovieListScreen> {
               ? _createUi(jsonResult.data)
               : Container();
         } else
-          return apiHandler(response: jsonResult);
+          return apiHandler(
+              loading: ShimmerView(
+                apiName: apiName,
+                viewType: ShimmerView.VIEW_CATEGORY,
+              ),
+              response: jsonResult);
       },
     );
   }
@@ -140,8 +149,13 @@ class _MovieListScreenState extends State<MovieListScreen> {
           tag: tag,
           image: result.profilePath,
           job: result.knownForDepartment,
-          onTap: (int id) => navigationPush(context,
-              PersonDetail(id: id, imgPath: result.profilePath, tag: tag)));
+          onTap: (int id) => navigationPush(
+              context,
+              PersonDetail(
+                  id: id,
+                  name: result.name,
+                  imgPath: ApiConstant.IMAGE_POSTER + result.profilePath,
+                  tag: tag)));
     } else if (data is NowPlayingRespo) {
       Result item = data.results[index];
       return getMovieItemRow(
@@ -237,6 +251,11 @@ class _MovieListScreenState extends State<MovieListScreen> {
         image: image,
         job: chatactor,
         onTap: (int id) => navigationPush(
-            context, PersonDetail(id: id, imgPath: image, tag: tag)));
+            context,
+            PersonDetail(
+                id: id,
+                name: name,
+                imgPath: ApiConstant.IMAGE_POSTER + image,
+                tag: tag)));
   }
 }

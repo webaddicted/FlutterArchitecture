@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterarch/constant/api_constant.dart';
-import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/data/home/movie_cat_respo.dart';
 import 'package:flutterarch/model/movie_model.dart';
@@ -9,6 +8,7 @@ import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:flutterarch/utils/global_utility.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/movie_list_screen.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -25,7 +25,7 @@ class MovieCate extends StatelessWidget {
         if (jsonResult.status == ApiStatus.COMPLETED)
           return getCate(context, jsonResult.data.genres);
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(loading: ShimmerView(viewType: ShimmerView.VIEW_CATEGORY, parentHeight:150,height: 100,width: 110 ,),response: jsonResult);
       },
     );
   }

@@ -14,7 +14,11 @@ import 'package:flutterarch/utils/apiutils/api_response.dart';
 //     },
 //   ));
 // }
-
+// void navigationPop(BuildContext context, StatefulWidget route) {
+//   Navigator.pop(context, MaterialPageRoute(builder: (context) {
+//     return route;
+//   }));
+// }
 void navigationPush(BuildContext context, StatefulWidget route) {
   Navigator.push(context, RouteTransition(widget: route));
 }
@@ -23,11 +27,7 @@ void navigationPop(BuildContext context, StatefulWidget route) {
   Navigator.pop(context, RouteTransition(widget: route));
 }
 
-// void navigationPop(BuildContext context, StatefulWidget route) {
-//   Navigator.pop(context, MaterialPageRoute(builder: (context) {
-//     return route;
-//   }));
-// }
+
 
 void navigationStateLessPush(BuildContext context, StatelessWidget route) {
   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -139,17 +139,21 @@ AppBar getAppBarWithBackBtn(
     String title,
     Color bgColor,
     double fontSize,
+    String titleTag,
     Widget icon}) {
   return AppBar(
     backgroundColor: bgColor == null ? ColorConst.APP_COLOR : bgColor,
     leading: icon,
     centerTitle: true,
-    title: new Text(
-      title,
-      style: new TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: fontSize != null ? fontSize : 16),
+    title: Hero(
+      tag: titleTag == null ? "" : titleTag,
+      child: new Text(
+        title,
+        style: new TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: fontSize != null ? fontSize : 16),
+      ),
     ),
   );
 }

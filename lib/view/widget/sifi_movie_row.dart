@@ -10,6 +10,7 @@ import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/details/detail_movie.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/widget/full_image.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:flutterarch/view/widget/tranding_movie_row.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -28,9 +29,13 @@ class SifiMovieRow extends StatelessWidget {
       builder: (context, _, model) {
         var jsonResult = getData(apiName, model);
         if (jsonResult.status == ApiStatus.COMPLETED)
-          return getCount(jsonResult.data)>0?getTradingList(context, jsonResult.data):Container();
+          return getCount(jsonResult.data) > 0
+              ? getTradingList(context, jsonResult.data)
+              : Container();
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(
+              loading: ShimmerView(viewType: ShimmerView.VIEW_CASOSAL),
+              response: jsonResult);
       },
     );
   }
@@ -88,7 +93,9 @@ class SifiMovieRow extends StatelessWidget {
         item = jsonResult.profiles[index];
       else
         item = jsonResult.backdrops[index];
-      String tag = getTitle(apiName) + item.filePath!=null ?item.filePath:'' + index.toString();
+      String tag = getTitle(apiName) + item.filePath != null
+          ? item.filePath
+          : '' + index.toString();
       return getLargeItem(
           context: context,
           img: ApiConstant.IMAGE_POSTER + item.filePath,
@@ -105,6 +112,7 @@ class SifiMovieRow extends StatelessWidget {
     } else if (jsonResult is NowPlayingRespo) {
       Result item = jsonResult.results[index];
       String tag = getTitle(apiName) + item.poster_path + index.toString();
+      String img = ApiConstant.IMAGE_POSTER + item.poster_path;
       return getLargeItem(
           context: context,
           img: ApiConstant.IMAGE_POSTER + item.poster_path,
@@ -112,7 +120,7 @@ class SifiMovieRow extends StatelessWidget {
           screenSpace: 80,
           tag: tag,
           onTap: () => navigationPush(
-              context, DetailsMovieScreen(apiName, index, item.id, tag)));
+              context, DetailsMovieScreen(item.original_title,img,apiName, index, item.id, tag)));
     } else
       Container(child: getTxt(msg: StringConst.NO_DATA_FOUND));
   }
@@ -151,7 +159,7 @@ Widget getLargeItem(
     String img,
     String name,
     String tag,
-      double screenSpace,
+    double screenSpace,
     Function onTap}) {
   final size = MediaQuery.of(context).size;
   return Padding(

@@ -12,6 +12,7 @@ import 'package:flutterarch/view/details/detail_movie.dart';
 import 'package:flutterarch/view/details/movie_list_screen.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/widget/rating_result.dart';
+import 'package:flutterarch/view/widget/shimmer_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class TrandingMovieRow extends StatelessWidget {
@@ -34,7 +35,14 @@ class TrandingMovieRow extends StatelessWidget {
               ? getMovieList(context, apiName, jsonResult.data)
               : Container();
         else
-          return apiHandler(response: jsonResult);
+          return apiHandler(
+              loading: ShimmerView(
+                viewType: ShimmerView.VIEW_HORIZONTAL_MOVIE_LIST,
+                parentHeight: 240,
+                height: 185,
+                width: 125,
+              ),
+              response: jsonResult);
       },
     );
   }
@@ -103,7 +111,7 @@ class TrandingMovieRow extends StatelessWidget {
           height: 185,
           width: 125,
           id: item.id,
-          img: item.poster_path==null?"":item.poster_path,
+          img: item.poster_path == null ? "" : item.poster_path,
           name: item.original_title,
           vote: item.vote_average);
     } else if (apiName == StringConst.PERSON_MOVIE_CAST &&
@@ -116,7 +124,7 @@ class TrandingMovieRow extends StatelessWidget {
           height: 185,
           width: 125,
           id: item.id,
-          img: item.posterPath==null?"":item.posterPath,
+          img: item.posterPath == null ? "" : item.posterPath,
           name: item.originalTitle,
           vote: item.voteAverage);
     } else if (apiName == StringConst.PERSON_MOVIE_CREW &&
@@ -129,7 +137,7 @@ class TrandingMovieRow extends StatelessWidget {
           height: 185,
           width: 125,
           id: item.id,
-          img: item.posterPath==null?"":item.posterPath,
+          img: item.posterPath == null ? "" : item.posterPath,
           name: item.originalTitle,
           vote: item.voteAverage);
     } else
@@ -162,7 +170,8 @@ Widget getMovieItemRow(
                   SizedBox(
                     height: height,
                     child: ClipRRect(
-                      child: getCacheImage(ApiConstant.IMAGE_POSTER + img.toString()),
+                      child: getCacheImage(
+                          ApiConstant.IMAGE_POSTER + img.toString()),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -178,7 +187,7 @@ Widget getMovieItemRow(
                                   navigationPush(
                                       context,
                                       DetailsMovieScreen(
-                                          apiName, index, id, tag));
+                                          name, ApiConstant.IMAGE_POSTER+img,apiName, index, id, tag));
                               }))),
                 ],
               ),
@@ -242,13 +251,19 @@ Widget getHeading(
     String apiName,
     int movieId,
     bool isShowViewAll = true}) {
+  String titleTag = getTitle(apiName) + "_Heading_" + apiName;
   return Padding(
     padding: const EdgeInsets.only(left: 8, right: 8),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        getTxtBlackColor(
-            msg: getTitle(apiName), fontSize: 19, fontWeight: FontWeight.w700),
+        Hero(
+          tag: titleTag,
+          child: getTxtBlackColor(
+              msg: getTitle(apiName),
+              fontSize: 19,
+              fontWeight: FontWeight.w700),
+        ),
         if (isShowViewAll)
           GestureDetector(
             onTap: () {
