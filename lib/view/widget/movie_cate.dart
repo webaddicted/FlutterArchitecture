@@ -60,7 +60,7 @@ class MovieCate extends StatelessWidget {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                loadCircleImg(getCategoryMovie()[index], 0, 100),
+                loadCircleCacheImg(getCategoryMovie()[index], 100),
                 // ClipRRect(
                 //   borderRadius: BorderRadius.circular(100),
                 //   child: Container(

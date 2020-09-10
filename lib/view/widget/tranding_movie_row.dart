@@ -171,7 +171,7 @@ Widget getMovieItemRow(
                     height: height,
                     child: ClipRRect(
                       child: getCacheImage(
-                          ApiConstant.IMAGE_POSTER + img.toString()),
+                          url:ApiConstant.IMAGE_POSTER + img.toString(), height: height),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),

@@ -21,9 +21,8 @@ class NavDrawerView extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 50)),
-            loadCircleImg(
+            loadCircleCacheImg(
                 "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg",
-                0,
                 140),
             Padding(padding: EdgeInsets.only(top: 10)),
             Text(

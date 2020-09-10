@@ -68,7 +68,7 @@ Widget fullListImage({String name, String image, String tag, Function onTap}) {
                 tag: tag,
                 child: SizedBox(
                   height: 180,
-                    width: double.infinity, child: getCacheImage(image))),
+                    width: double.infinity, child: getCacheImage(url:image, height: 180))),
             Positioned(
               bottom: 0.0,
               left: 0.0,

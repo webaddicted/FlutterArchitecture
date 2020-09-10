@@ -103,7 +103,7 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
       width: double.infinity,
       child: Hero(
           tag: tag,
-          child: Container(child: getCacheImage(image)
+          child: Container(child: getCacheImage(url:image, height: expandedHeight+50)
               // ApiConstant.IMAGE_ORIG_POSTER + data.posterPath.toString()),
               )),
     );
@@ -247,10 +247,10 @@ class _DetailsMovieScreenState extends State<DetailsMovieScreen> {
             child: Container(
                 width: 80,
                 height: 125,
-                child: getCacheImage(_dataMovie == null
+                child: getCacheImage(url:_dataMovie == null
                     ? image
                     : ApiConstant.IMAGE_POSTER +
-                        _dataMovie.backdropPath.toString())),
+                        _dataMovie.backdropPath.toString(), height: 125, width: 80)),
           ),
         ],
       ),

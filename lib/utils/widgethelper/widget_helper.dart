@@ -27,8 +27,6 @@ void navigationPop(BuildContext context, StatefulWidget route) {
   Navigator.pop(context, RouteTransition(widget: route));
 }
 
-
-
 void navigationStateLessPush(BuildContext context, StatelessWidget route) {
   Navigator.push(context, MaterialPageRoute(builder: (context) {
     return route;
@@ -200,7 +198,9 @@ Text getTxtWhiteColor(
     maxLines: maxLines,
     textAlign: textAlign,
     style: _getFontStyle(
-        txtColor: ColorConst.WHITE_COLOR, fontSize: fontSize, fontWeight: fontWeight),
+        txtColor: ColorConst.WHITE_COLOR,
+        fontSize: fontSize,
+        fontWeight: fontWeight),
   );
 }
 
@@ -215,7 +215,9 @@ Text getTxtBlackColor(
     textAlign: textAlign,
     maxLines: maxLines,
     style: _getFontStyle(
-        txtColor: ColorConst.BLACK_COLOR, fontSize: fontSize, fontWeight: fontWeight),
+        txtColor: ColorConst.BLACK_COLOR,
+        fontSize: fontSize,
+        fontWeight: fontWeight),
   );
 }
 
@@ -268,36 +270,36 @@ TextStyle _getFontStyle(
 
 //  {END TEXT VIEW}
 
-ClipRRect loadLocalCircleImg(String imagePath, double radius) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(radius),
-    child: new FadeInImage.assetNetwork(
-        height: radius,
-        width: radius,
-        fit: BoxFit.fill,
-        placeholder: imagePath,
-        image: 'imgUrl'),
-  );
-}
-
-FadeInImage loadImg(String url, int placeHolderPos) {
-  return new FadeInImage.assetNetwork(
-      fit: BoxFit.fill,
-      placeholder: _getPlaceHolder(placeHolderPos),
-      image: url);
-}
-
-ClipRRect loadCircleImg(String imgUrl, int placeHolderPos, double radius) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(radius),
-    child: new FadeInImage.assetNetwork(
-        height: radius,
-        width: radius,
-        fit: BoxFit.fill,
-        placeholder: _getPlaceHolder(placeHolderPos),
-        image: imgUrl),
-  );
-}
+// ClipRRect loadLocalCircleImg(String imagePath, double radius) {
+//   return ClipRRect(
+//     borderRadius: BorderRadius.circular(radius),
+//     child: new FadeInImage.assetNetwork(
+//         height: radius,
+//         width: radius,
+//         fit: BoxFit.fill,
+//         placeholder: imagePath,
+//         image: 'imgUrl'),
+//   );
+// }
+//
+// FadeInImage loadImg(String url, int placeHolderPos) {
+//   return new FadeInImage.assetNetwork(
+//       fit: BoxFit.fill,
+//       placeholder: _getPlaceHolder(placeHolderPos),
+//       image: url);
+// }
+//
+// ClipRRect loadCircleImg(String imgUrl, int placeHolderPos, double radius) {
+//   return ClipRRect(
+//     borderRadius: BorderRadius.circular(radius),
+//     child: new FadeInImage.assetNetwork(
+//         height: radius,
+//         width: radius,
+//         fit: BoxFit.fill,
+//         placeholder: _getPlaceHolder(placeHolderPos),
+//         image: imgUrl),
+//   );
+// }
 
 String _getPlaceHolder(int placeHolderPos) {
   switch (placeHolderPos) {
@@ -307,14 +309,21 @@ String _getPlaceHolder(int placeHolderPos) {
       return AssetsConst.LOGO_IMG;
   }
 }
-
-Widget getCacheImage(String url) {
+ClipRRect loadCircleCacheImg(String url, double radius) {
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(radius),
+    child: getCacheImage(url:url, height:radius, width: radius)
+  );
+}
+Widget getCacheImage({String url, double height, double width}) {
   return CachedNetworkImage(
     fit: BoxFit.cover,
+    width: width != null ? width : double.infinity,
+    height: height != null ? height : double.infinity,
     imageUrl: url,
     placeholder: (context, url) => Container(
-      width: double.infinity,
-      height: double.infinity,
+      width: width != null ? width : double.infinity,
+      height: height != null ? height : double.infinity,
       color: Colors.grey[400],
     ),
     errorWidget: (context, url, error) => const Icon(Icons.error),
