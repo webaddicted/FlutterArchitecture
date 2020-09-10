@@ -3,6 +3,7 @@ import 'package:flutterarch/constant/assets_const.dart';
 import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
+import 'package:flutterarch/view/intro/intro_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         accentColorBrightness: Brightness.light,
         primarySwatch: ColorConst.APP_COLOR,
       ),
-      home: HomeScreen(),
+      home: IntroScreen(),
     );
   }
 }
