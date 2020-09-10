@@ -62,25 +62,36 @@ class _PersonDetailState extends State<PersonDetail> {
   }
 
   Widget _createUi({PersonDetailRespo data}) {
+    var homeIcon = IconButton(
+        icon: Icon(
+          Icons.arrow_back_ios,
+          color: ColorConst.BLACK_COLOR,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        });
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-              backgroundColor: ColorConst.APP_COLOR,
+              backgroundColor: Colors.white,
               expandedHeight: 330.0,
+              leading: homeIcon,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
                 title: GestureDetector(
                     onTap: () {
                       // model.fetchPersonMovie(personId);
                     },
-                    child: getTxt(msg: name)),
+                    child: getTxtBlackColor(
+                        msg: name, fontWeight: FontWeight.bold, fontSize: 16)),
+
                 background: Hero(
                     tag: tag,
-                    child: CachedNetworkImage(
-                      imageUrl: imgPath.toString(),
-                      fit: BoxFit.fill,
+                    child: getCacheImage(
+                      url: imgPath.toString(),
                     )),
               )),
           SliverList(

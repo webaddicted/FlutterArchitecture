@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterarch/constant/api_constant.dart';
 import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
-import 'package:flutterarch/view/category/category_screen.dart';
 import 'package:flutterarch/view/details/movie_list_screen.dart';
 
 class NavDrawerView extends StatelessWidget {
@@ -110,6 +110,7 @@ class NavDrawerView extends StatelessWidget {
       case "About us":
         break;
       case "Exit":
+        SystemNavigator.pop();
         break;
 
     }

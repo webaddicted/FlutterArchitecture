@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutterarch/constant/color_const.dart';
+import 'package:flutterarch/utils/sp/sp_manager.dart';
 import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/home/home_screen.dart';
 import 'package:flutterarch/view/intro/slide.dart';
 import 'package:flutterarch/view/intro/slide_dots.dart';
 import 'package:flutterarch/view/intro/slide_item.dart';
-
-
 
 class IntroScreen extends StatefulWidget {
   @override
@@ -50,14 +50,25 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Builder(
-          builder: (context) => _crateUi(context),
-        ));
+      builder: (context) => _crateUi(context),
+    ));
   }
 
   Widget _crateUi(BuildContext context) {
+    Color color = ColorConst.WHITE_COLOR;
+    // if (_currentPage == 0)
+    //   color = ColorConst.SLIDER1_COLOR;
+    // else if (_currentPage == 1)
+    //   color = ColorConst.SLIDER2_COLOR;
+    // else if (_currentPage == 2)
+    //   color = ColorConst.SLIDER3_COLOR;
+    // else
+    //   color = ColorConst.SLIDER4_COLOR;
+
     return Stack(
       children: <Widget>[
         Container(
+          color: color,
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: <Widget>[
@@ -99,19 +110,18 @@ class _IntroScreenState extends State<IntroScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               FlatButton(
-                child: Text(
-                  'SKIP',
-                  style: TextStyle(fontSize: 18),
-                ),
+                child: getTxtBlackColor(
+                    msg: 'SKIP', fontSize: 16, fontWeight: FontWeight.bold),
                 onPressed: () {
+                  SPManager.setOnboarding('true');
                   navigationPush(context, HomeScreen());
                 },
               ),
               FlatButton(
-                child: Text(
-                  _currentPage < 2 ? 'NEXT' : 'DONE',
-                  style: TextStyle(fontSize: 18),
-                ),
+                child: getTxtBlackColor(
+                    msg: _currentPage < 3 ? 'NEXT' : 'DONE',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
                 onPressed: () {
                   _nextClick();
                 },
@@ -124,14 +134,16 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   void _nextClick() {
-    if (_currentPage < 2) {
+    if (_currentPage < 3) {
       _currentPage++;
       _pageController.animateToPage(
         _currentPage,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
-    } else
+    } else {
+      SPManager.setOnboarding('true');
       navigationPush(context, HomeScreen());
+    }
   }
 }

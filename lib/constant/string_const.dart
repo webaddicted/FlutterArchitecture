@@ -32,6 +32,8 @@ class StringConst {
   static const String PERSON_MOVIE_CREW = 'Person Movie Crew';
   static const String PERSON_MOVIE_CAST = 'Person Movie Cast';
 
+  static String IS_ON_BOARDING_SHOW = 'is_on_boarding_show';
+
 
 //  {END TITLE}
 }

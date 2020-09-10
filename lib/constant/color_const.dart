@@ -16,6 +16,11 @@ class ColorConst {
   static Color FB_COLOR = colorFromHex("#2951a6");
   static Color GOOGLE_COLOR = colorFromHex("#f14336");
   static Color TWITTER_COLOR = colorFromHex("#00acee");
+  static Color SLIDER1_COLOR = colorFromHex("#f64c73");
+  static Color SLIDER2_COLOR = colorFromHex("#20d2bb");
+  static Color SLIDER3_COLOR = colorFromHex("#3395ff");
+  static Color SLIDER4_COLOR = colorFromHex("#c873f4");
+
 
   static Color CIRCLE_FADE1 = colorFromHex('#9BCCFFFF');
   static Color CIRCLE_FADE2 = colorFromHex('#ACCCE6FF');

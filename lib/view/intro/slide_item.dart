@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/intro/slide.dart';
 
 class SlideItem extends StatelessWidget {
   final int index;
+
   SlideItem(this.index);
 
   @override
@@ -12,8 +14,8 @@ class SlideItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          width: 200,
-          height: 200,
+          width: 250,
+          height: 250,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
@@ -25,22 +27,19 @@ class SlideItem extends StatelessWidget {
         SizedBox(
           height: 40,
         ),
-        Text(
-          slideList[index].title,
-          style: TextStyle(
+        getTxtAppColor(
+            msg: slideList[index].title,
             fontSize: 22,
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
+            fontWeight: FontWeight.bold),
         SizedBox(
           height: 10,
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20, top: 5),
-          child: Text(
-            slideList[index].description,
-            textAlign: TextAlign.center,
-          ),
+          child: getTxtBlackColor(
+              msg: slideList[index].description,
+              fontSize: 18,
+              textAlign: TextAlign.center),
         ),
         SizedBox(height: 50),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterarch/constant/color_const.dart';
 
 class SlideDots extends StatelessWidget {
   bool isActive;
@@ -12,7 +13,7 @@ class SlideDots extends StatelessWidget {
       height: isActive ? 12 : 8,
       width: isActive ? 12 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+        color: isActive ? ColorConst.APP_COLOR : Colors.grey,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
