@@ -45,7 +45,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
           Icons.arrow_back_ios,
           color: ColorConst.BLACK_COLOR,
         ),
-        onPressed: () => Navigator.pop(context));
+        onPressed: () => SystemNavigator.pop());
     return WillPopScope(
         onWillPop: () {
           return onWillPop(context);
