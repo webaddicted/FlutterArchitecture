@@ -53,7 +53,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
         child: Scaffold(
             appBar: getAppBarWithBackBtn(
                 ctx: context,
-                title: 'Tranding Movie',
+                title: 'Trending Movie',
                 bgColor: Colors.white,
                 titleTag: titleTag,
                 icon: homeIcon),
