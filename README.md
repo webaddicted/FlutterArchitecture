@@ -3,11 +3,11 @@
 Flutter architecture is architecture for flutter with help of Scope model.
 
 ### Component Used
-    Scope Model
-    Dio
-    Cache Image
-    Shimmer
-    Custom Fonts
+  * Scope Model
+  * Dio
+  * Cache Image
+  * Shimmer
+  * Custom Fonts
 
 ## Getting Started
 
