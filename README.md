@@ -4,9 +4,9 @@ Flutter architecture is architecture for flutter with help of Scope model.
 
 [![GitHub license](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
 ![Github Followers](https://img.shields.io/github/followers/webaddicted?label=Follow&style=social)
-![GitHub stars](https://img.shields.io/github/stars/webaddicted/Flutter-Movies4U?style=social)
-![GitHub forks](https://img.shields.io/github/forks/webaddicted/Flutter-Movies4U?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/webaddicted/Flutter-Movies4U?style=social)
+![GitHub stars](https://img.shields.io/github/stars/webaddicted/FlutterArchitecture?style=social)
+![GitHub forks](https://img.shields.io/github/forks/webaddicted/FlutterArchitecture?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/webaddicted/FlutterArchitecture?style=social)
 
 ## Component Used
 
