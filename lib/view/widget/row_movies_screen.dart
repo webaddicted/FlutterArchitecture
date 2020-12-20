@@ -41,9 +41,11 @@ class RowMoviesScreen extends StatelessWidget {
 
   Widget getMovieItemRow() {
     String tag = 'Trending Movies';
-    return Hero(
-      tag: tag,
-      child: Container(
+    return
+      // Hero(
+      // // tag: tag,
+      // child:
+      Container(
         width: width,
         child: Column(
           children: <Widget>[
@@ -103,8 +105,8 @@ class RowMoviesScreen extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
+      );
+    // );
   }
 
   Color _getBackgrountRate(var rate) {

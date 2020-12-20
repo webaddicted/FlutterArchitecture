@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterarch/constant/assets_const.dart';
 import 'package:flutterarch/constant/color_const.dart';
 import 'package:flutterarch/constant/string_const.dart';
-import 'file:///D:/AndroidStudioProjects/testing/Flutter-architecture/lib/view/movie_list_screen.dart';
+import 'package:flutterarch/view/scope_model_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         accentColorBrightness: Brightness.light,
         primarySwatch: ColorConst.APP_COLOR,
       ),
-      home: MovieListScreen(),
+      home: ScopeModelScreen(),
     );
   }
 }

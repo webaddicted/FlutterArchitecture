@@ -4,11 +4,11 @@ import 'package:flutterarch/data/repo/movie_repository.dart';
 import 'package:flutterarch/utils/apiutils/api_response.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class MovieModel extends Model {
+class MovieScopeModel extends Model {
   MovieRepository _movieRepo;
   ApiResponse<NowPlayingRespo> _trandingMovieRespo;
 
-  MovieModel() {
+  MovieScopeModel() {
     _movieRepo = MovieRepository();
     _trandingMovieRespo =  ApiResponse.loading();
   }

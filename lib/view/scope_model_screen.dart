@@ -10,34 +10,29 @@ import 'package:flutterarch/utils/widgethelper/widget_helper.dart';
 import 'package:flutterarch/view/widget/row_movies_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class MovieListScreen extends StatefulWidget {
-  String apiName, dynamicList, titleTag;
-  int movieId;
+class ScopeModelScreen extends StatefulWidget {
 
-  MovieListScreen(
-      {this.apiName, this.dynamicList, this.movieId, this.titleTag});
+  ScopeModelScreen();
 
   @override
-  _MovieListScreenState createState() =>
-      _MovieListScreenState(apiName, dynamicList, movieId, titleTag);
+  _ScopeModelScreenState createState() =>
+      _ScopeModelScreenState();
 }
 
-class _MovieListScreenState extends State<MovieListScreen> {
-  _MovieListScreenState(
-      this.apiName, this.dynamicList, this.movieId, this.titleTag);
+class _ScopeModelScreenState extends State<ScopeModelScreen> {
+  _ScopeModelScreenState();
 
-  int movieId;
-  String castCrewTitle, titleTag;
-  MovieModel model;
-  String apiName, dynamicList;
+  String castCrewTitle;
+  MovieScopeModel model;
   ScrollController _scrollController = new ScrollController();
   int total_pages = 1;
   int pageSize = 1;
   List<Result> dataResult = new List();
+
   @override
   void initState() {
     super.initState();
-    model = MovieModel();
+    model = MovieScopeModel();
     model.trandingMovie(pageSize);
     _scrollController.addListener(() {
       // debugPrint(
@@ -47,8 +42,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
       if (_scrollController.position.pixels > 0 &&
           _scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent) {
-        if (pageSize <= total_pages)
-          model.trandingMovie(pageSize);
+        if (pageSize <= total_pages) model.trandingMovie(pageSize);
       }
     });
   }
@@ -61,6 +55,12 @@ class _MovieListScreenState extends State<MovieListScreen> {
           color: ColorConst.BLACK_COLOR,
         ),
         onPressed: () => SystemNavigator.pop());
+    var nextScreen = IconButton(
+        icon: Icon(
+          Icons.local_parking_rounded,
+          color: ColorConst.BLACK_COLOR,
+        ),
+        onPressed: () {});
     return WillPopScope(
         onWillPop: () {
           return onWillPop(context);
@@ -70,14 +70,15 @@ class _MovieListScreenState extends State<MovieListScreen> {
                 ctx: context,
                 title: 'Trending Movie',
                 bgColor: Colors.white,
-                titleTag: titleTag,
-                icon: homeIcon),
+                icon: homeIcon,
+                actions: [nextScreen]),
             body: OrientationBuilder(
-                builder: (context, orientation) => ScopedModel(model: model, child: apiresponse(orientation)))));
+                builder: (context, orientation) => ScopedModel(
+                    model: model, child: apiresponse(orientation)))));
   }
 
   Widget apiresponse(Orientation orientation) {
-    return ScopedModelDescendant<MovieModel>(
+    return ScopedModelDescendant<MovieScopeModel>(
       builder: (context, _, model) {
         var jsonResult = model.getTrandingMovie;
         if (jsonResult.status == ApiStatus.COMPLETED) {
@@ -98,18 +99,24 @@ class _MovieListScreenState extends State<MovieListScreen> {
       total_pages = data.total_pages;
       dataResult.addAll(data.results);
     }
-    int columnCount = orientation == Orientation.portrait ? data is NowPlayingRespo?2:3 : data is NowPlayingRespo?4:4;
+    int columnCount = orientation == Orientation.portrait
+        ? data is NowPlayingRespo
+            ? 2
+            : 3
+        : data is NowPlayingRespo
+            ? 4
+            : 4;
     return Container(
       alignment: Alignment.center,
-      child:
-      StaggeredGridView.countBuilder(
+      child: StaggeredGridView.countBuilder(
         crossAxisCount: columnCount,
         mainAxisSpacing: 1.0,
         crossAxisSpacing: 1.0,
-        staggeredTileBuilder: (int index) => StaggeredTile.extent(1, data is NowPlayingRespo?290:128),
+        staggeredTileBuilder: (int index) =>
+            StaggeredTile.extent(1, data is NowPlayingRespo ? 290 : 128),
         physics: BouncingScrollPhysics(),
         controller: _scrollController,
-        itemCount:dataResult.length,
+        itemCount: dataResult.length,
         itemBuilder: (BuildContext context, int index) => Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: getItemView(dataResult[index], index),
@@ -132,7 +139,6 @@ class _MovieListScreenState extends State<MovieListScreen> {
   Widget getItemView(Result item, int index) {
     return RowMoviesScreen(
         context: context,
-        apiName: apiName,
         index: index,
         height: 240,
         width: 135,
