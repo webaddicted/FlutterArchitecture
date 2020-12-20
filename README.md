@@ -8,7 +8,7 @@ Flutter architecture is architecture for flutter with help of Scope model.
 ![GitHub forks](https://img.shields.io/github/forks/webaddicted/Flutter-Movies4U?style=social)
 ![GitHub watchers](https://img.shields.io/github/watchers/webaddicted/Flutter-Movies4U?style=social)
 
-### Component Used
+## Component Used
 
   * Scope Model
   * Dio
@@ -16,7 +16,9 @@ Flutter architecture is architecture for flutter with help of Scope model.
   * Shimmer
   * Custom Fonts
 
-## Getting Started
+## ScreenShot
+
+<img src="screenshot/person/web addicted cast detail1.jpg" width="205">    <img src="screenshot/person/web addicted cast detail2.jpg" width="205">
 
 ### Repository File
 
