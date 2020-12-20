@@ -11,9 +11,7 @@ import 'package:flutterarch/view/widget/row_movies_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ScopeModelScreen extends StatefulWidget {
-
   ScopeModelScreen();
-
   @override
   _ScopeModelScreenState createState() =>
       _ScopeModelScreenState();
@@ -122,17 +120,6 @@ class _ScopeModelScreenState extends State<ScopeModelScreen> {
           child: getItemView(dataResult[index], index),
         ),
       ),
-      // StaggeredGridView.countBuilder(
-      //   crossAxisCount: 4,
-      //   itemCount: data.results.length,
-      //   itemBuilder: (BuildContext context, int index) => Padding(
-      //     padding: const EdgeInsets.all(6.0),
-      //     child: getItemView(data, index),
-      //   ),
-      //   staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
-      //   mainAxisSpacing: 4.0,
-      //   crossAxisSpacing: 4.0,
-      // ),
     );
   }
 
