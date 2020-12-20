@@ -48,8 +48,11 @@ Flutter architecture is architecture for flutter with help of Scope model.
               endPoint: ApiConstant.TRENDING_MOVIE_LIST, page: pageSize);
           notifyListeners();
        }
-   
-<img src="screenshot/arch.png" height="500"><img src="screenshot/scope.png" height="500">
+ ## Flow Diagram
+ 
+<img src="screenshot/arch.png" height="500">
+
+<img src="screenshot/scope.png" height="500">
    
    
    
