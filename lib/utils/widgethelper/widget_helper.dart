@@ -14,6 +14,7 @@ import 'package:flutterarch/utils/widgethelper/SlideRoute.dart';
 //     },
 //   ));
 // }
+
 // void navigationPop(BuildContext context, StatefulWidget route) {
 //   Navigator.pop(context, MaterialPageRoute(builder: (context) {
 //     return route;

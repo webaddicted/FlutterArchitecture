@@ -83,7 +83,7 @@ class RowMoviesScreen extends StatelessWidget {
 //                      fontWeight: FontWeight.bold),
                 RatingResult(vote, 12.0),
                 SizedBox(width: 5),
-                RatingBar(
+                RatingBar.builder(
                   itemSize: 12.0,
                   initialRating: vote / 2,
                   minRating: 1,
@@ -97,7 +97,7 @@ class RowMoviesScreen extends StatelessWidget {
                   ),
                   onRatingUpdate: (rating) {
                     print(rating);
-                  },
+                  }
                 )
               ],
             )

@@ -11,11 +11,11 @@ class MovieRepository {
   fetchNowPlaying({String endPoint, int page}) async {
     try {
       var commonReq;
-      if (page == null) {
-        commonReq = CommonMovieReq.empty().toJson();
-      } else {
+      // if (page == null) {
+      //   commonReq = CommonMovieReq.empty().toJson();
+      // } else {
         commonReq = CommonMovieReq.page(page.toString()).toJson();
-      }
+      // }
       final response = await apiHelper.getWithParam("${endPoint}", commonReq);
       return ApiResponse.returnResponse(
           response, NowPlayingRespo.fromJson(jsonDecode(response.toString())));

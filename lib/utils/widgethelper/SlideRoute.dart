@@ -14,8 +14,7 @@ class RouteTransition extends PageRouteBuilder {
             Animation<double> secondaryAnimation, Widget child) {
           if (fade) {
             return new FadeTransition(opacity: animation, child: child);
-          }
-          {
+          }{
             return new SlideTransition(
               position: new Tween<Offset>(
                 begin: const Offset(0.0, 0.0),

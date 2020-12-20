@@ -10,16 +10,16 @@ class MovieModel extends Model {
 
   MovieModel() {
     _movieRepo = MovieRepository();
-    _trandingMovieRespo = ApiResponse();
+    _trandingMovieRespo =  ApiResponse.loading();
   }
 
   ApiResponse<NowPlayingRespo> get getTrandingMovie => _trandingMovieRespo;
 
-  trandingMovie() async {
-    _trandingMovieRespo = ApiResponse.loading();
-    notifyListeners();
+  trandingMovie(int pageSize) async {
+    // _trandingMovieRespo = ApiResponse.loading();
+    // notifyListeners();
     _trandingMovieRespo = await _movieRepo.fetchNowPlaying(
-        endPoint: ApiConstant.TRENDING_MOVIE_LIST);
+        endPoint: ApiConstant.TRENDING_MOVIE_LIST, page: pageSize);
     notifyListeners();
   }
 }

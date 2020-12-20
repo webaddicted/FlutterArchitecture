@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutterarch/constant/api_constant.dart';
 
 class ApiBaseHelper {
@@ -19,20 +18,20 @@ class ApiBaseHelper {
 
   Future<Response<dynamic>> get(String url) async {
     Response response =
-        await _dio.get(url, options: Options(responseType: ResponseType.json));
+    await _dio.get(url, options: Options(responseType: ResponseType.json));
     return response;
   }
 
   Future<Response<dynamic>> getWithParam(
-      @required String url, @required Map<String, String> params) async {
+      String url, Map<String, String> params) async {
     Response response;
     try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        response = await _dio.get(url,
-            queryParameters: params,
-            options: Options(responseType: ResponseType.json));
-      }
+      // final result = await InternetAddress.lookup('google.com');
+      // if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      response = await _dio.get(url,
+          queryParameters: params,
+          options: Options(responseType: ResponseType.json));
+      // }
     } on SocketException catch (_) {
       response = new Response();
       response.statusCode = ApiRespoCode.no_internet_connection;
