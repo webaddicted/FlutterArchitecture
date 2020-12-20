@@ -18,7 +18,7 @@ Flutter architecture is architecture for flutter with help of Scope model.
 
 ## ScreenShot
 
-<img src="screenshot/person/web addicted cast detail1.jpg" width="205">    <img src="screenshot/person/web addicted cast detail2.jpg" width="205">
+<img src="screenshot/home.jpg" width="205">    <img src="screenshot/arch.gif">
 
 ### Repository File
 
