@@ -15,6 +15,13 @@ Flutter architecture is architecture for flutter with help of Scope model.
   * Cache Image
   * Shimmer
   * Custom Fonts
+  
+## Apk
+
+***You can Install and test latest Kotlin Demo app from below 👇***
+
+[![Flutter Architecture](https://img.shields.io/badge/Flutter%20-Architecture-brightgreen.svg?style=for-the-badge&logo=android)](https://github.com/webaddicted/Flutter-architecture/tree/master/apk/flutterarch.apk)
+
 
 ## ScreenShot
 
