@@ -18,7 +18,9 @@ Flutter architecture is architecture for flutter with help of Scope model.
 
 ## ScreenShot
 
-<img src="screenshot/home.jpg" width="205">    <img src="screenshot/arch.gif">
+<img src="screenshot/home.jpg" width="250">    <img src="screenshot/arch.gif" width="250">
+
+ <img src="screenshot/home_land.jpg" width="600">
 
 ### Repository File
 
@@ -46,6 +48,10 @@ Flutter architecture is architecture for flutter with help of Scope model.
               endPoint: ApiConstant.TRENDING_MOVIE_LIST, page: pageSize);
           notifyListeners();
        }
+   
+<img src="screenshot/arch.png" height="500"><img src="screenshot/scope.png" height="500">
+   
+   
    
 ### View(UI)
             @override
