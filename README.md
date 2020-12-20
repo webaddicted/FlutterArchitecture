@@ -15,10 +15,19 @@ Flutter architecture is architecture for flutter with help of Scope model.
   * Cache Image
   * Shimmer
   * Custom Fonts
+  
+## Apk
+
+***You can Install and test latest Kotlin Demo app from below 👇***
+
+[![Flutter Architecture](https://img.shields.io/badge/Flutter%20-Architecture-brightgreen.svg?style=for-the-badge&logo=android)](https://github.com/webaddicted/Flutter-architecture/tree/master/apk/flutterarch.apk)
+
 
 ## ScreenShot
 
-<img src="screenshot/person/web addicted cast detail1.jpg" width="205">    <img src="screenshot/person/web addicted cast detail2.jpg" width="205">
+<img src="screenshot/home.jpg" width="250">    <img src="screenshot/arch.gif" width="250">
+
+ <img src="screenshot/home_land.jpg" width="600">
 
 ### Repository File
 
@@ -46,6 +55,15 @@ Flutter architecture is architecture for flutter with help of Scope model.
               endPoint: ApiConstant.TRENDING_MOVIE_LIST, page: pageSize);
           notifyListeners();
        }
+ ## Flow Diagram
+ 
+ 
+<img src="screenshot/arch.png" height="500">
+
+
+<img src="screenshot/scope.png" height="600">
+   
+   
    
 ### View(UI)
             @override
