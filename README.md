@@ -108,6 +108,16 @@ Flutter architecture is architecture for flutter with help of Scope model.
 
 
         
+## LICENSE
+```
 
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+             TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+```
 
 
