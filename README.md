@@ -1,16 +1,95 @@
-# flutterarch
+# Flutter Architecture
 
-A new Flutter application.
+Flutter architecture is architecture for flutter with help of Scope model.
 
-## Getting Started
+[![GitHub license](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
+![Github Followers](https://img.shields.io/github/followers/webaddicted?label=Follow&style=social)
+![GitHub stars](https://img.shields.io/github/stars/webaddicted/Flutter-Movies4U?style=social)
+![GitHub forks](https://img.shields.io/github/forks/webaddicted/Flutter-Movies4U?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/webaddicted/Flutter-Movies4U?style=social)
 
-This project is a starting point for a Flutter application.
+## Component Used
 
-A few resources to get you started if this is your first Flutter project:
+  * Scope Model
+  * Dio
+  * Cache Image
+  * Shimmer
+  * Custom Fonts
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## ScreenShot
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="screenshot/person/web addicted cast detail1.jpg" width="205">    <img src="screenshot/person/web addicted cast detail2.jpg" width="205">
+
+### Repository File
+
+     fetchNowPlaying({String endPoint, int page}) async {
+       try {
+         var commonReq = CommonMovieReq.page(page.toString()).toJson();
+         final response = await apiHelper.getWithParam("${endPoint}", commonReq);
+         return ApiResponse.returnResponse(
+             response, NowPlayingRespo.fromJson(jsonDecode(response.toString())));
+        } catch (error, stacktrace) {
+         return ApiResponse.error(
+             errCode: ApiRespoCode.known,
+             errMsg: error.toString(),
+             errBdy: stacktrace.toString(),
+             data: null);
+        }
+     }
+    
+### Model File
+
+       trandingMovie(int pageSize) async {
+          _trandingMovieRespo = ApiResponse.loading();
+          notifyListeners();
+          _trandingMovieRespo = await _movieRepo.fetchNowPlaying(
+              endPoint: ApiConstant.TRENDING_MOVIE_LIST, page: pageSize);
+          notifyListeners();
+       }
+   
+### View(UI)
+            @override
+        Widget build(BuildContext context) {
+          var homeIcon = IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: ColorConst.BLACK_COLOR,
+              ),
+              onPressed: () => SystemNavigator.pop());
+          return WillPopScope(
+              onWillPop: () {
+                return onWillPop(context);
+              },
+              child: Scaffold(
+                  appBar: getAppBarWithBackBtn(
+                      ctx: context,
+                      title: 'Trending Movie',
+                      bgColor: Colors.white,
+                      icon: homeIcon,
+                    ),
+                  body: OrientationBuilder(
+                      builder: (context, orientation) => ScopedModel(
+                          model: model, child: apiresponse(orientation)))));
+        }
+
+        Widget apiresponse(Orientation orientation) {
+          return ScopedModelDescendant<MovieScopeModel>(
+            builder: (context, _, model) {
+              var jsonResult = model.getTrandingMovie;
+              if (jsonResult.status == ApiStatus.COMPLETED) {
+                return _createUi(jsonResult.data, orientation);
+              } else
+                return apiHandler(
+                    loading: RowMoviesScreen(
+                      isShowShimmer: true,
+                    ),
+                    response: jsonResult);
+            },
+          );
+        }
+
+
+        
+
+
+
